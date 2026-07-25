@@ -1,0 +1,2213 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>NeoValues: Fire Rises</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Quicksand:wght@300;500;700&display=swap');
+
+:root {
+    --bg-color: #18181b;       
+    --card-bg: #27272a;        
+    --text-primary: #f4f4f5;   
+    --text-dim: #a1a1aa;       
+    --accent-primary: #d4d4d8; 
+    --accent-soft: #71717a;    
+    --radius-lg: 28px;
+    --radius-sm: 14px;
+    --soft-shadow: 0 10px 40px rgba(0, 0, 0, 0.4);
+    --smooth-transition: all 0.4s cubic-bezier(0.23, 1, 0.32, 1);
+}
+
+body {
+    margin: 0;
+    padding: 0;
+    min-height: 100vh;
+    font-family: 'Quicksand', sans-serif;
+    background-color: var(--bg-color);
+    color: var(--text-primary);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.main-container {
+    width: 100%;
+    max-width: 1200px;
+    min-height: 100vh;
+    padding: 60px 24px;
+    box-sizing: border-box;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+/* Header & Tiny Versioning */
+.title-container {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 50px;
+}
+
+h1 {
+    font-weight: 700;
+    font-size: 3.2rem;
+    margin: 0;
+    color: var(--accent-primary);
+    letter-spacing: -1.5px;
+    text-align: center;
+}
+
+.version-icon {
+    width: 30px; 
+    height: auto;
+    opacity: 0.3;
+    filter: grayscale(1);
+}
+
+/* Question Box */
+.question-container {
+    min-height: 140px;
+    margin-bottom: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+}
+
+#question {
+    background-color: var(--card-bg);
+    padding: 35px 50px;
+    border-radius: var(--radius-lg);
+    font-size: 1.4rem;
+    font-weight: 500;
+    line-height: 1.5;
+    box-shadow: var(--soft-shadow);
+    max-width: 800px;
+    border: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+/* Buttons */
+#buttons {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    width: 100%;
+    max-width: 480px;
+    margin-top: 20px;
+    margin-bottom: 50px;
+}
+
+.button-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 15px;
+    margin-top: 20px;
+    margin-bottom: 40px;
+    width: 100%;
+}
+
+.button-container button {
+    width: auto; 
+    min-width: 220px;
+    max-width: 400px;
+    text-align: center;
+}
+
+#buttons.multi-column {
+    display: flex;
+    flex-direction: column;
+    grid-template-columns: none;
+    max-width: 480px;
+    gap: 12px;
+}
+
+button {
+    padding: 16px 24px;
+    background-color: var(--card-bg);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: var(--radius-sm);
+    color: var(--text-primary);
+    font-family: inherit;
+    font-size: 1.05rem;
+    font-weight: 700;
+    cursor: pointer;
+    transition: var(--smooth-transition);
+}
+
+button:hover {
+    background-color: var(--text-primary);
+    color: var(--bg-color);
+    transform: translateY(-2px);
+    box-shadow: 0 5px 15px rgba(255, 255, 255, 0.1);
+}
+
+/* Results Display */
+
+#results-container, .values-flex-container {
+    display: flex;
+    justify-content: left;
+    flex-wrap: wrap;
+    gap: 30px;
+    margin-top: 20px;
+}
+
+.main-results-wrapper {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    padding: 40px 0;
+}
+
+.top-section, .bottom-section {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 100%;
+}
+
+#results-container {
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 30px;
+    margin-top: 20px;
+}
+
+.result-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 150px;
+    transition: var(--smooth-transition);
+}
+
+.result-icon {
+    width: 100px;
+    height: 100px;
+    margin-bottom: 15px;
+    filter: drop-shadow(0 5px 15px rgba(0,0,0,0.3));
+    transition: var(--smooth-transition);
+}
+
+.result-item:hover .result-icon {
+    transform: scale(1.1);
+}
+
+.result-text {
+    font-size: 0.9rem;
+    font-weight: 700;
+    color: var(--text-dim);
+    text-transform: uppercase;
+    text-align: center;
+    width: 100%;
+}
+
+.label-bubble {
+    display: inline-block;
+    padding: 14px 40px;
+    border-radius: 50px;
+    font-weight: 700;
+    font-size: 1.8rem;
+    color: #ffffff;
+    margin: 15px 0;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+    transition: var(--smooth-transition);
+}
+
+#secondary-label {
+    background-color: transparent !important;
+    font-size: 1.1rem;
+    margin-top: 10px;
+    border: 2px solid;
+    box-shadow: none;
+}
+
+/* Info Boxes */
+.description-box {
+    background-color: var(--card-bg);
+    padding: 7px 20px;
+    border-radius: var(--radius-lg);
+    text-align: left;
+    line-height: 1.7;
+    border: 1px solid rgba(255, 255, 255, 0.05);
+    width: 100%;
+    max-width: 800px;
+    box-sizing: border-box;
+    align-self: center; 
+    margin-top: 10px;
+}
+
+.license-bubble {
+    background-color: var(--card-bg);
+    color: var(--text-primary);
+    width: 90%;
+    max-width: 800px;
+    height: auto;
+    max-height: 60vh;
+    padding: 30px;
+    border-radius: var(--radius-lg);
+    overflow-y: auto;
+    border: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.description-box, .license-bubble {
+    margin-top: 20px;
+    margin-bottom: 20px;
+}
+
+.category-title {
+    font-size: 1.5rem;
+    color: var(--accent-primary);
+    margin-bottom: 20px;
+    border-bottom: 1px solid var(--accent-soft);
+    padding-bottom: 8px;
+}
+
+.desc-icon {
+    width: 110px;
+    height: 110px;
+    margin-bottom: 15px;
+    filter: drop-shadow(0 8px 16px rgba(0,0,0,0.4));
+    transition: var(--smooth-transition);
+}
+
+.desc-icon:hover {
+    transform: scale(1.05);
+}
+
+.original-work-sign {
+    display: none;
+    text-align: center;
+    margin: 0 auto;
+}
+
+/* Contact */
+
+a {
+    color: var(--text-primary);
+    text-decoration: none;
+    transition: var(--smooth-transition);
+}
+
+a:hover {
+    color: var(--accent-primary);
+    text-decoration: underline;
+}
+
+.version-text {
+    font-size: 0.85rem;
+    color: var(--text-dim);
+    font-weight: 500;
+    opacity: 0.6;
+    margin-top: -5px;
+}
+
+/* Mobile */
+@media (max-width: 800px) {
+    #results-container, .values-flex-container {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr); 
+        gap: 15px;
+        width: 100%;
+        max-width: 400px;
+        margin: 20px auto 0;
+        justify-items: center;
+    }
+
+    .result-item {
+        width: 100% !important; 
+        max-width: 90px;
+    }
+
+    .result-icon {
+        width: 80px;
+        height: 80px;
+        margin-bottom: 8px;
+    }
+
+    .result-text {
+        font-size: 0.75rem;
+    }
+
+    .button-container {
+        align-items: center;
+    }
+
+    #ideology-title {
+        font-size: 1.8rem;
+        margin-bottom: 15px;
+        padding: 0 10px;
+    }
+
+    .license-bubble {
+        width: 100% !important;
+        max-width: 100vw;
+        box-sizing: border-box;
+        padding: 20px !important;
+        margin: 20px 0 !important;
+        border-radius: var(--radius-sm);
+        height: auto;
+        max-height: 65vh;
+    }
+
+    #license-text {
+        white-space: pre-wrap !important;
+        word-wrap: break-word;
+        font-size: 0.85rem;
+    }
+
+    .category-section .values-flex-container {
+        display: flex;
+        flex-direction: row;
+        flex-wrap: wrap;
+        justify-content: left;
+        max-width: 100%;
+    }
+
+    .label-bubble {
+        font-size: 0.8rem !important;
+        padding: 8px 16px !important;
+        margin: 1px !important;
+        width: auto !important;
+        max-width: 90%;
+        box-sizing: border-box;
+        text-align: center;
+    }
+    
+    .category-title {
+        font-size: 1.2rem;
+        text-align: left;
+        width: 100%;
+    }
+
+}
+
+
+/* single-page view helpers */
+.view { display: none; }
+.view.active { display: block; }
+.desc-icon { display: none; }
+</style>
+</head>
+<body>
+<div class="main-container">
+
+  <!-- HOME -->
+  <div id="view-home" class="view active">
+    <h1>NeoValues: Fire Rises</h1>
+    <p class="intro-text">The NeoValues political quiz, re-mapped so every final result is one of the specific sub-ideologies from The Fire Rises (HOI4 mod). Same questions, same logic &mdash; the outcomes now match TFR's own ideology list instead of real-world ones.</p>
+    <div id="buttons">
+        <button onclick="showView('instruction')">Start</button>
+        <button onclick="showView('values')">Values</button>
+        <button onclick="showView('ideologies')">Ideologies</button>
+    </div>
+  </div>
+
+  <!-- INSTRUCTIONS -->
+  <div id="view-instruction" class="view">
+    <div class="question-container">
+        <h2>You will be presented with a series of questions. For each one, click the button with your opinion on it.</h2>
+    </div>
+    <div id="buttons">
+        <button onclick="startQuiz()">Continue</button>
+        <button onclick="showView('home')">Back</button>
+    </div>
+  </div>
+
+  <!-- QUIZ -->
+  <div id="view-quiz" class="view">
+    <div class="question-container">
+        <h2 id="question"></h2>
+    </div>
+    <div id="quiz-buttons"></div>
+  </div>
+
+  <!-- RESULTS -->
+  <div id="view-results" class="view">
+    <div class="main-results-wrapper">
+        <div class="top-section">
+            <div class="title-container">
+                <h1>NeoValues: Fire Rises</h1>
+                <span class="version-text">v1.0 &mdash; TFR Edition</span>
+            </div>
+            <div id="results-container"></div>
+        </div>
+        <div class="bottom-section">
+            <div id="label"></div>
+            <div id="secondary-label"></div>
+            <p class="intro-text results-instruction">
+                Click on any label to view its description.
+            </p>
+            <div id="buttons" style="margin-top: 30px;">
+                <button onclick="showView('home')">Back to menu</button>
+            </div>
+        </div>
+    </div>
+  </div>
+
+  <!-- DESCRIPTION -->
+  <div id="view-description" class="view">
+    <img id="ideology-icon" src="" alt="" class="desc-icon">
+    <h1 id="ideology-title">Loading...</h1>
+    <div class="description-box">
+        <p id="ideology-description"></p>
+    </div>
+    <div class="button-container">
+        <button onclick="goBackFromDescription()">Back</button>
+    </div>
+  </div>
+
+  <!-- IDEOLOGIES -->
+  <div id="view-ideologies" class="view">
+    <h1>All Ideologies</h1>
+    <p class="intro-text">Below is a collection of all The Fire Rises sub-ideologies that this quiz can produce as a final result, grouped loosely by political family.</p>
+    <div id="ideologies-container"></div>
+    <div id="buttons" style="margin-top: 40px; padding-bottom: 60px;">
+        <button onclick="showView('home')">Back</button>
+    </div>
+  </div>
+
+  <!-- VALUES -->
+  <div id="view-values" class="view">
+    <h1>All Values</h1>
+    <p class="intro-text">Below is a collection of all values included in NeoValues. Click on any item to view its detailed description.</p>
+    <div id="values-container"></div>
+    <div id="buttons" style="margin-top: 40px; padding-bottom: 60px;">
+        <button onclick="showView('home')">Back</button>
+    </div>
+  </div>
+
+</div>
+
+<script>
+const resultsMapping = {
+    "economics": {
+        "welfare_capitalism": "Welfare Capitalism",
+        "social_capitalism": "Social Capitalism",
+        "laissez_faire": "Laissez-Faire",
+        "countereconomics": "Counter-Economics",
+        "state_capitalism": "State Capitalism",
+        "state_socialism": "State Socialism",
+        "dirigisme": "Dirigisme",
+        "keynesianism": "Keynesianism",
+        "third_way": "Third Way",
+        "neo_corporatism": "Neocorporatism",
+        "corporatism": "Corporatism",
+        "social_corporatism": "Social-Corporatism",
+        "yellow_socialism": "Yellow Socialism",
+        "mutualism": "Mutualism",
+        "guild_socialism": "Guild Socialism",
+        "syndicalism": "Syndicalism",
+        "market_socialism": "Market Socialism",
+        "free_socialism": "Free Socialism",
+        "communization": "Communization",
+        "utopian_socialism": "Utopian Socialism",
+        "mutual_distributism": "Mutual-Distributism",
+        "social_distributism": "Social-Distributism",
+        "agrarian_socialism": "Agrarian Socialism",
+        "distributism": "Distributism",
+        "feudalism": "Feudalism",
+        "cameralism": "Cameralism",
+        "free_market_distributism": "Free Market Distributism"
+    },
+    "resource_management": {
+        "Voluntaryism": "Voluntaryism",
+        "lvt": "Land Value Tax",
+        "flat_taxation": "Flat Taxation",
+        "Progressive_Taxation": "Progressive Taxation",
+        "Confiscatory_Taxation": "Confiscatory Taxation",
+        "collective_distribution": "Collective Distribution"
+    },
+    "culture": {
+        "postmodernism": "Postmodernism",
+        "civil_liberalism": "Civil Liberalism",
+        "progressivism": "Progressivism",
+        "social_progressivism": "Social-Progressivism",
+        "conservative_liberalism": "Conservative Liberalism",
+        "liberal_conservatism": "Liberal Conservatism",
+        "progressive_conservatism": "Progressive Conservatism",
+        "conservatism": "Conservatism",
+        "reactionaryism": "Reactionaryism",
+        "paleoconservatism": "Paleoconservatism",
+        "neoreactionaryism": "Neoreactionaryism",
+        "traditionalism": "Traditionalism",
+        "reactionary_modernism": "Reactionary Modernism"
+    },
+    "authority": {
+        "theocracy": "Theocracy",
+        "absolute": "Absolute Monarchy",
+        "totalitarianism": "Totalitarianism",
+        "religious_authoritarianism": "Religious Authoritarianism",
+        "autocracy": "Autocracy",
+        "anarchism": "Anarchism",
+        "partocracy": "Partocracy",
+        "representative_democracy": "Representative Democracy",
+        "direct_democracy": "Direct Democracy",
+        "constitutional": "Constitutional Monarchy",
+        "minarchism": "Minarchism",
+        "meritocracy": "Meritocracy",
+        "technocracy": "Technocracy",
+        "stratocracy": "Stratocracy",
+        "aristocracy": "Aristocracy",
+        "anarcho_monarchism": "Anarcho-Monarchism",
+        "neocameralism": "Neocameralism"
+    },
+    "nation": {
+        "Internationalism": "Internationalism",
+        "Cosmopolitanism": "Cosmopolitanism",
+        "civic_nationalism": "Civic Nationalism",
+        "cultural_nationalism": "Cultural Nationalism",
+        "ethnic_nationalism": "Ethnic Nationalism",
+        "pan_nationalism": "Pan-Nationalism",
+        "racial_nationalism": "Racial Nationalism",
+        "Tribalism": "Tribalism",
+        "egoism": "Egoism",
+        "communitarianism": "Communitarianism"
+    },
+    "foreign": {
+        "Isolationism": "Isolationism",
+        "Non_Interventionism": "Non-Interventionism",
+        "Realpolitik": "Realpolitik",
+        "Imperialism": "Imperialism",
+        "Interventionism": "Interventionism",
+        "Globalism": "Globalism",
+        "armed_neutrality": "Armed Neutrality"
+    }
+};
+
+const subCategories = {
+    "economics": {
+        "welfare": [
+            "welfare_capitalism",
+            "social_capitalism"
+        ],
+        "regulated": [
+            "state_capitalism",
+            "dirigisme",
+            "keynesianism",
+            "third_way",
+            "neo_corporatism",
+            "cameralism"
+        ],
+        "free_cap": [
+            "laissez_faire",
+            "countereconomics"
+        ],
+        "socialists": [
+            "state_socialism",
+            "free_socialism",
+            "communization",
+            "utopian_socialism",
+            "syndicalism",
+            "guild_socialism"
+        ],
+        "market_left": [
+            "agrarian_socialism",
+            "mutualism"
+        ],
+        "corpotatists": [
+            "corporatism",
+            "social_corporatism",
+            "yellow_socialism"
+        ],
+        "distributist": [
+            "distributism",
+            "social_distributism",
+            "mutual_distributism",
+            "agrarian_socialism",
+            "free_market_distributism"
+        ]
+    },
+    "resource_management": {
+        "mainstream_tax": [
+            "flat_taxation",
+            "Progressive_Taxation",
+            "lvt"
+        ],
+        "farleft_tax": [
+            "Confiscatory_Taxation",
+            "collective_distribution"
+        ]
+    },
+    "culture": {
+        "progressive": [
+            "progressivism",
+            "social_progressivism",
+            "civil_liberalism"
+        ],
+        "mainstreamcon": [
+            "conservatism",
+            "liberal_conservatism",
+            "progressive_conservatism",
+            "conservative_liberalism"
+        ],
+        "oldways": [
+            "reactionaryism",
+            "paleoconservatism"
+        ],
+        "neoold": [
+            "neoreactionaryism",
+            "traditionalism",
+            "reactionary_modernism"
+        ]
+    },
+    "authority": {
+        "divine": [
+            "theocracy",
+            "absolute",
+            "religious_authoritarianism"
+        ],
+        "auth": [
+            "totalitarianism",
+            "autocracy",
+            "partocracy",
+            "stratocracy",
+            "technocracy",
+            "meritocracy",
+            "aristocracy",
+            "neocameralism"
+        ],
+        "mainstreampower": [
+            "representative_democracy",
+            "direct_democracy",
+            "minarchism",
+            "constitutional"
+        ],
+        "anarch": [
+            "anarcho_monarchism",
+            "anarchism"
+        ]
+    },
+    "nation": {
+        "global": [
+            "Internationalism",
+            "Cosmopolitanism"
+        ],
+        "modnat": [
+            "civic_nationalism",
+            "cultural_nationalism",
+            "communitarianism"
+        ],
+        "hitler": [
+            "ethnic_nationalism",
+            "pan_nationalism",
+            "racial_nationalism",
+            "Tribalism"
+        ]
+    },
+    "foreign": {
+        "close": [
+            "Isolationism",
+            "Non_Interventionism",
+            "armed_neutrality"
+        ],
+        "neolib": [
+            "Interventionism",
+            "Globalism"
+        ]
+    }
+};
+
+const incompatibleSubCategories = {
+    "welfare": "socialists",
+    "free_cap": "socialists",
+    "farleft_tax": "mainstream_tax",
+    "progressive": "neoold",
+    "mainstreamcon": "neoold",
+    "divine": "mainstreampower",
+    "mainstreampower": "auth",
+    "global": "hitler",
+    "close": "neolib"
+};
+
+const labelMapping = {
+    "syndicalism|reactionary_modernism|totalitarianism|cultural_nationalism|Imperialism": "National Syndicalism",
+    "corporatism|traditionalism|religious_authoritarianism|cultural_nationalism": "Clerical Fascism",
+    "corporatism|paleoconservatism|autocracy|cultural_nationalism|Isolationism": "Classical Fascism",
+    "corporatism|reactionary_modernism|totalitarianism|cultural_nationalism|Imperialism": "Classical Fascism",
+    "feudalism|traditionalism|aristocracy|racial_nationalism|Imperialism": "Esoteric Nazism",
+    "corporatism|progressivism|totalitarianism|Imperialism": "Transhumanism",
+    "state_capitalism|reactionary_modernism|totalitarianism|pan_nationalism|Imperialism": "Neo-Nazism",
+    "state_capitalism|traditionalism|totalitarianism|racial_nationalism": "Babylonian Nazism",
+    "yellow_socialism|traditionalism|minarchism|ethnic_nationalism|Imperialism": "Right Anarchism",
+    "guild_socialism|reactionary_modernism|totalitarianism|ethnic_nationalism|armed_neutrality": "Strasserism",
+    "yellow_socialism|traditionalism|totalitarianism|cultural_nationalism|Imperialism": "Falangism",
+    "agrarian_socialism|paleoconservatism|totalitarianism|cultural_nationalism|Realpolitik": "Falangism",
+    "laissez_faire|reactionary_modernism|minarchism|cultural_nationalism|Imperialism": "Right Anarchism",
+    "corporatism|postmodernism|totalitarianism|egoism|Imperialism": "Obliteration Of The Self",
+    "agrarian_socialism|reactionaryism|aristocracy|pan_nationalism|Imperialism": "Ethnonationalism",
+    "feudalism|conservatism|aristocracy|Tribalism|Imperialism": "Aristocratic Despotism",
+    "social_distributism|traditionalism|religious_authoritarianism|communitarianism|Globalism": "Theocracy (Ideology)",
+    "distributism|traditionalism|religious_authoritarianism|communitarianism|Globalism": "Theocracy (Ideology)",
+    "corporatism|traditionalism|religious_authoritarianism|communitarianism|Globalism": "Theocracy (Ideology)",
+    "laissez_faire|reactionaryism|autocracy|cultural_nationalism|Imperialism": "Corporatocracy",
+    "laissez_faire|flat_taxation|civil_liberalism|minarchism|civic_nationalism|Non_Interventionism": "Classical Liberalism",
+    "social_capitalism|Progressive_Taxation|social_progressivism|representative_democracy|civic_nationalism|Globalism": "Green Liberalism",
+    "laissez_faire|flat_taxation|civil_liberalism|representative_democracy|civic_nationalism|Globalism": "Neoliberalism",
+    "laissez_faire|flat_taxation|conservative_liberalism|representative_democracy|cultural_nationalism|Realpolitik": "National Liberalism",
+    "welfare_capitalism|flat_taxation|conservative_liberalism|representative_democracy|civic_nationalism|Globalism": "Right-Centrism",
+    "welfare_capitalism|civil_liberalism|direct_democracy|Globalism": "Left-Centrism",
+    "syndicalism|collective_distribution|anarchism|Internationalism": "Labour Syndicalism",
+    "communization|collective_distribution|social_progressivism|anarchism|Internationalism": "Anarcho-Communism",
+    "free_socialism|collective_distribution|social_progressivism|anarchism|Internationalism": "Communist Populism",
+    "countereconomics|collective_distribution|social_progressivism|anarchism|Cosmopolitanism": "Anarcho-Communism",
+    "free_socialism|postmodernism|anarchism|Cosmopolitanism": "Eurocommunism",
+    "mutualism|anarchism": "Labour Syndicalism",
+    "market_socialism|anarchism": "Right Anarchism",
+    "utopian_socialism|traditionalism|anarchism|Tribalism": "Ethnonationalism",
+    "agrarian_socialism|lvt|reactionaryism|anarcho_monarchism|ethnic_nationalism|Isolationism": "Aristocratic Despotism",
+    "communization|collective_distribution|social_progressivism|anarchism|communitarianism": "Anarcho-Communism",
+    "communization|collective_distribution|social_progressivism|anarchism|egoism": "Anarcho-Communism",
+    "free_socialism|collective_distribution|social_progressivism|direct_democracy|Internationalism": "Eco-Socialism",
+    "state_socialism|collective_distribution|social_progressivism|minarchism|Internationalism|Non_Interventionism": "Sovereign Democracy (Left)",
+    "free_socialism|collective_distribution|social_progressivism|minarchism|Internationalism": "Democratic Socialism",
+    "laissez_faire|Voluntaryism|civil_liberalism|anarchism|Cosmopolitanism|Non_Interventionism": "Right Anarchism",
+    "distributism|anarchism": "Classical Liberalism",
+    "mutual_distributism|anarchism": "Classical Liberalism",
+    "free_market_distributism|anarchism": "Classical Liberalism",
+    "countereconomics|lvt|anarchism": "Right Anarchism",
+    "countereconomics|Voluntaryism|postmodernism|anarchism|egoism": "Right Anarchism",
+    "countereconomics|Voluntaryism|anarchism|Non_Interventionism": "Right Anarchism",
+    "countereconomics|Voluntaryism|anarchism|Isolationism": "Right Anarchism",
+    "countereconomics|Voluntaryism|reactionaryism|anarcho_monarchism|communitarianism|Non_Interventionism": "Right Libertarianism",
+    "countereconomics|Voluntaryism|reactionaryism|anarcho_monarchism|Tribalism|Non_Interventionism": "Right Libertarianism",
+    "countereconomics|Voluntaryism|paleoconservatism|anarcho_monarchism|communitarianism|Non_Interventionism": "Right Libertarianism",
+    "countereconomics|Voluntaryism|paleoconservatism|anarcho_monarchism|Tribalism|Non_Interventionism": "Right Libertarianism",
+    "countereconomics|Voluntaryism|progressivism|anarchism|Globalism": "Right Anarchism",
+    "laissez_faire|lvt|minarchism": "Classical Liberalism",
+    "laissez_faire|flat_taxation|minarchism|civic_nationalism|Interventionism": "Right Libertarianism",
+    "laissez_faire|flat_taxation|conservatism|minarchism|cultural_nationalism|Non_Interventionism": "Right-Centrism",
+    "laissez_faire|flat_taxation|liberal_conservatism|minarchism|cultural_nationalism|Non_Interventionism": "Right-Centrism",
+    "laissez_faire|flat_taxation|progressive_conservatism|minarchism|cultural_nationalism|Non_Interventionism": "Right-Centrism",
+    "laissez_faire|flat_taxation|conservative_liberalism|minarchism|cultural_nationalism|Non_Interventionism": "Right-Centrism",
+    "laissez_faire|flat_taxation|paleoconservatism|minarchism|ethnic_nationalism|Isolationism": "National Liberalism",
+    "welfare_capitalism|lvt|social_progressivism|minarchism|Globalism": "Green Liberalism",
+    "welfare_capitalism|lvt|progressivism|minarchism|Globalism": "Green Liberalism",
+    "welfare_capitalism|flat_taxation|conservative_liberalism|direct_democracy|civic_nationalism|armed_neutrality": "Right-Centrism",
+    "laissez_faire|Voluntaryism|paleoconservatism|minarchism|Non_Interventionism": "Right Libertarianism",
+    "laissez_faire|Voluntaryism|progressivism|minarchism|egoism|Globalism": "Green Liberalism",
+    "laissez_faire|neoreactionaryism|neocameralism": "Ultra-Putinism",
+    "countereconomics|neoreactionaryism|neocameralism": "Ultra-Putinism",
+    "utopian_socialism|representative_democracy|Internationalism|Non_Interventionism": "Confucian Socialism",
+    "state_capitalism|Progressive_Taxation|partocracy|civic_nationalism|Realpolitik": "Market Socialism",
+    "state_socialism|collective_distribution|traditionalism|totalitarianism|cultural_nationalism|Imperialism": "National Bolshevism",
+    "state_socialism|collective_distribution|reactionary_modernism|totalitarianism|cultural_nationalism|Imperialism": "National Bolshevism",
+    "market_socialism|direct_democracy|progressivism|Internationalism|Globalism": "Democratic Socialism",
+    "state_socialism|Confiscatory_Taxation|conservatism|partocracy|civic_nationalism|Realpolitik": "Conservative Socialism",
+    "state_socialism|Confiscatory_Taxation|paleoconservatism|civic_nationalism|Isolationism": "Left-Wing Nationalism",
+    "neo_corporatism|Progressive_Taxation|civil_liberalism|representative_democracy|civic_nationalism|Globalism": "Social Democracy",
+    "social_capitalism|Progressive_Taxation|social_progressivism|representative_democracy|Internationalism|Globalism": "Left-Centrism",
+    "social_capitalism|Progressive_Taxation|progressivism|representative_democracy|Internationalism|Globalism": "Left-Centrism",
+    "social_capitalism|Progressive_Taxation|conservatism|representative_democracy|civic_nationalism|Realpolitik": "Social Patriotism",
+    "welfare_capitalism|Progressive_Taxation|conservatism|representative_democracy|cultural_nationalism|Realpolitik": "National Conservatism",
+    "social_capitalism|Progressive_Taxation|conservatism|representative_democracy|cultural_nationalism": "Right-Centrism",
+    "social_capitalism|paleoconservatism|representative_democracy|cultural_nationalism|Isolationism": "Classical Conservatism",
+    "dirigisme|paleoconservatism|representative_democracy|cultural_nationalism|Isolationism": "Christian Conservatism",
+    "cameralism|paleoconservatism|representative_democracy|cultural_nationalism|Isolationism": "Christian Conservatism",
+    "distributism|paleoconservatism|representative_democracy|cultural_nationalism|Isolationism": "Classical Conservatism",
+    "free_market_distributism|paleoconservatism|representative_democracy|cultural_nationalism|Isolationism": "Classical Conservatism",
+    "welfare_capitalism|liberal_conservatism|representative_democracy|civic_nationalism|Interventionism": "Neoconservatism",
+    "welfare_capitalism|progressive_conservatism|representative_democracy|civic_nationalism|Interventionism": "Neoconservatism",
+    "welfare_capitalism|conservative_liberalism|representative_democracy|civic_nationalism|Interventionism": "Neoconservatism",
+    "welfare_capitalism|paleoconservatism|representative_democracy|civic_nationalism|Interventionism": "Right-Centrism",
+    "welfare_capitalism|liberal_conservatism|representative_democracy|civic_nationalism|Realpolitik": "Right-Centrism",
+    "social_capitalism|liberal_conservatism|representative_democracy|civic_nationalism|Realpolitik": "Right-Centrism",
+    "welfare_capitalism|conservative_liberalism|representative_democracy|civic_nationalism|Globalism": "Christian Democracy",
+    "communization|collective_distribution|social_progressivism|Internationalism": "Anti-Revisionist Communism",
+    "state_socialism|collective_distribution|conservatism|partocracy|cultural_nationalism|Isolationism": "Juche",
+    "agrarian_socialism|collective_distribution|social_progressivism|partocracy|cultural_nationalism|Realpolitik": "Maoism",
+    "agrarian_socialism|collective_distribution|social_progressivism|partocracy|pan_nationalism|Interventionism": "National Communism",
+    "state_socialism|collective_distribution|social_progressivism|partocracy|Internationalism|Interventionism": "Digital Leninism",
+    "state_socialism|collective_distribution|social_progressivism|representative_democracy|Cosmopolitanism|Interventionism": "Trotskyism",
+    "communization|collective_distribution|postmodernism|anarchism|egoism": "Eurocommunism",
+    "state_socialism|collective_distribution|conservatism|totalitarianism|cultural_nationalism|Realpolitik": "Neo-Stalinism",
+    "market_socialism|collective_distribution|social_progressivism|direct_democracy|civic_nationalism|Non_Interventionism": "Sovereign Democracy (Left)",
+    "social_capitalism|Progressive_Taxation|liberal_conservatism|representative_democracy|civic_nationalism": "Christian Democracy",
+    "state_socialism|traditionalism|totalitarianism|cultural_nationalism|Realpolitik": "Syncretic Communism",
+    "cameralism|reactionaryism|autocracy|ethnic_nationalism|Isolationism": "Derzhavism",
+    "state_capitalism|reactionaryism|autocracy|pan_nationalism|Non_Interventionism": "Assadist Ba'athism",
+    "cameralism|reactionaryism|autocracy|pan_nationalism|Imperialism": "Neo-Imperial Putinism",
+    "corporatism|traditionalism|autocracy|cultural_nationalism|Isolationism": "Vichy Pétainism",
+    "cameralism|reactionary_modernism|autocracy|ethnic_nationalism|Realpolitik": "National Derzhavism",
+    "cameralism|reactionary_modernism|autocracy|pan_nationalism|Isolationism": "Naturalized Derzhavism",
+    "cameralism|traditionalism|autocracy|ethnic_nationalism|Isolationism": "Revivalist Derzhavism",
+    "social_corporatism|reactionaryism|autocracy|ethnic_nationalism|Isolationism": "Russian Syncrantism",
+    "corporatism|reactionaryism|autocracy|pan_nationalism|Imperialism": "Iraqi Ba'athism",
+    "cameralism|traditionalism|totalitarianism|pan_nationalism|Realpolitik": "Neo-Eurasianism (Right)",
+    "cameralism|reactionaryism|autocracy|ethnic_nationalism|Imperialism": "Greater Russia System",
+    "corporatism|reactionaryism|totalitarianism|ethnic_nationalism|Imperialism": "Ultranationalism",
+    "corporatism|traditionalism|totalitarianism|racial_nationalism|Imperialism": "Carolingian Fascism",
+    "state_socialism|totalitarianism|Internationalism|Realpolitik": "Chekist Communism",
+    "state_capitalism|progressive_conservatism|totalitarianism|civic_nationalism": "Jacobinism",
+    "agrarian_socialism|totalitarianism|racial_nationalism|Imperialism": "Nazi-Maoism",
+    "collective_distribution|totalitarianism|pan_nationalism|Realpolitik": "Neo-Eurasianism (Left)",
+    "state_socialism|reactionaryism|pan_nationalism|Non_Interventionism": "Left-Wing Ba'athism",
+    "collective_distribution|traditionalism|direct_democracy|pan_nationalism": "Gaddafism",
+    "state_socialism|stratocracy|civic_nationalism|Imperialism": "Li Zuocheng Thought",
+    "state_capitalism|neoreactionaryism|autocracy|cultural_nationalism": "Neo-Soviet Putinism",
+    "state_socialism|reactionaryism|autocracy|Isolationism": "Popular Derzhavism",
+    "state_socialism|reactionaryism|autocracy|Realpolitik": "Populist Sovietism",
+    "third_way|civil_liberalism|representative_democracy|civic_nationalism": "Centrist Pluralism",
+    "welfare_capitalism|progressivism|civic_nationalism|Non_Interventionism": "Liberal Populism",
+    "dirigisme|conservatism|civic_nationalism|Non_Interventionism": "Traditional Gaullism",
+    "laissez_faire|paleoconservatism|civic_nationalism|Realpolitik": "Trumpism (Libertarian)",
+    "dirigisme|paleoconservatism|civic_nationalism|Non_Interventionism": "Populist Gaullism",
+    "dirigisme|paleoconservatism|civic_nationalism|Isolationism": "Sovereign Democracy (Conservative)",
+    "welfare_capitalism|progressive_conservatism|representative_democracy|Interventionism": "Transitional Democracy",
+    "social_corporatism|paleoconservatism|civic_nationalism|Realpolitik": "Trumpism (Conservative)",
+    "dirigisme|reactionaryism|autocracy|ethnic_nationalism": "Democratic Derzhavism",
+    "welfare_capitalism|reactionaryism|autocracy|civic_nationalism": "Purification Administration",
+    "social_corporatism|reactionaryism|autocracy|ethnic_nationalism": "Radical Nationalism",
+    "feudalism|reactionaryism|absolute|ethnic_nationalism": "Black-Hundredist Nationalism",
+    "dirigisme|reactionaryism|autocracy|pan_nationalism": "Chinese Exceptionalism",
+    "cameralism|traditionalism|autocracy|Tribalism": "Kadyrovite Tendency",
+    "social_capitalism|paleoconservatism|autocracy|ethnic_nationalism": "Leonid Slutsky Thought",
+    "neo_corporatism|neoreactionaryism|autocracy|Globalism": "Pax Americana",
+    "state_capitalism|conservatism|autocracy|cultural_nationalism": "Putinism (Despotism)",
+    "neo_corporatism|neoreactionaryism|technocracy|Globalism": "Davos System",
+    "cameralism|reactionaryism|autocracy|Tribalism": "Mafia State",
+    "cameralism|paleoconservatism|aristocracy|cultural_nationalism": "Confucian Hyperconservatism",
+    "distributism|traditionalism|totalitarianism|ethnic_nationalism": "Ecofascism",
+    "corporatism|reactionaryism|autocracy|ethnic_nationalism": "Fascist Populism",
+    "distributism|traditionalism|stratocracy|ethnic_nationalism": "National Spartanism",
+    "distributism|traditionalism|theocracy|racial_nationalism": "Falun Dafa",
+    "cameralism|reactionaryism|autocracy|racial_nationalism": "Vladimir Zhirinovsky Thought",
+    "countereconomics|neoreactionaryism|anarchism|racial_nationalism": "Accelerationism",
+    "feudalism|traditionalism|theocracy|racial_nationalism": "Apocalypticism",
+    "free_market_distributism|neoreactionaryism|minarchism|racial_nationalism": "Right-Wing Accelerationism",
+    "distributism|traditionalism|religious_authoritarianism|racial_nationalism": "Salafism",
+    "state_socialism|stratocracy|civic_nationalism": "Left-Wing Military Junta",
+    "state_socialism|technocracy|postmodernism": "Technocracy (TotSoc)",
+    "state_socialism|totalitarianism|postmodernism": "Vanguardist Socialism",
+    "state_socialism|partocracy|Internationalism": "Marxism-Leninism",
+    "market_socialism|social_progressivism|partocracy": "Neo-Socialism (Left)",
+    "dirigisme|partocracy|cultural_nationalism": "Xi Jinping Thought",
+    "social_capitalism|autocracy|cultural_nationalism": "Left-Wing Putinism",
+    "communization|postmodernism|Internationalism": "Left Accelerationism",
+    "market_socialism|social_progressivism|representative_democracy": "Neo-Marxism",
+    "welfare_capitalism|social_progressivism|civic_nationalism": "Progressivism",
+    "state_socialism|autocracy|civic_nationalism": "Alexander Lukashenko Thought",
+    "distributism|progressivism|direct_democracy": "Green Politics",
+    "social_capitalism|progressivism|Non_Interventionism": "Left-Wing Populism",
+    "market_socialism|liberal_conservatism|representative_democracy": "Reformist Socialism",
+    "third_way|civil_liberalism|representative_democracy": "Centrism",
+    "social_capitalism|communitarianism|constitutional": "Communitarianism",
+    "welfare_capitalism|representative_democracy|Interventionism": "Enforced Democracy",
+    "market_socialism|civil_liberalism|representative_democracy": "Liberal Socialism",
+    "social_capitalism|conservative_liberalism|autocracy": "Liberal Putinism",
+    "neo_corporatism|civil_liberalism|Globalism": "Ultra-Liberalism",
+    "dirigisme|conservative_liberalism|autocracy": "Bleeding Heart Putinism",
+    "welfare_capitalism|conservatism|constitutional": "Constitutionalism",
+    "free_market_distributism|civil_liberalism|Interventionism": "Fehlinger Doctrine",
+    "welfare_capitalism|liberal_conservatism|representative_democracy": "Islamic Democracy",
+    "social_corporatism|paleoconservatism|cultural_nationalism": "Right-Wing Populism",
+    "third_way|conservatism|direct_democracy": "Anocracy",
+    "market_socialism|progressive_conservatism|autocracy": "Left Pragmatism",
+    "state_capitalism|stratocracy|Realpolitik": "Military Democracy",
+    "distributism|traditionalism|theocracy": "Wahhabism",
+    "feudalism|conservatism|absolute": "Absolute Monarchy (Ideology)",
+    "cameralism|reactionaryism|autocracy": "Autocracy",
+    "distributism|neoreactionaryism|ethnic_nationalism": "Identitarianism",
+    "welfare_capitalism|progressivism|representative_democracy": "Popular Front Socialism",
+    "state_capitalism|stratocracy": "Military Junta"
+};
+
+const ideologyGroups = {
+    "Totalitarian Left": [
+        "Chekist Communism",
+        "Digital Leninism",
+        "Jacobinism",
+        "Juche",
+        "Left-Wing Military Junta",
+        "Maoism",
+        "Nazi-Maoism",
+        "National Communism",
+        "Neo-Eurasianism (Left)",
+        "Neo-Stalinism",
+        "Syncretic Communism",
+        "Technocracy (TotSoc)",
+        "Transhumanism",
+        "Vanguardist Socialism"
+    ],
+    "Authoritarian Left": [
+        "Anti-Revisionist Communism",
+        "Left-Wing Ba'athism",
+        "Left-Wing Nationalism",
+        "Gaddafism",
+        "Li Zuocheng Thought",
+        "Market Socialism",
+        "Marxism-Leninism",
+        "Neo-Socialism (Left)",
+        "Neo-Soviet Putinism",
+        "Popular Derzhavism",
+        "Populist Sovietism",
+        "Trotskyism",
+        "Xi Jinping Thought",
+        "Left-Wing Putinism",
+        "Social Patriotism"
+    ],
+    "Libertarian Left": [
+        "Anarcho-Communism",
+        "Communist Populism",
+        "Confucian Socialism",
+        "Democratic Socialism",
+        "Eco-Socialism",
+        "Eurocommunism",
+        "Labour Syndicalism",
+        "Left Accelerationism",
+        "Neo-Marxism",
+        "Popular Front Socialism",
+        "Sovereign Democracy (Left)",
+        "Progressivism"
+    ],
+    "Centre-Left": [
+        "Alexander Lukashenko Thought",
+        "Green Politics",
+        "Left-Centrism",
+        "Left-Wing Populism",
+        "Social Democracy",
+        "Reformist Socialism"
+    ],
+    "Centrist Liberal": [
+        "Centrism",
+        "Centrist Pluralism",
+        "Christian Democracy",
+        "Communitarianism",
+        "Enforced Democracy",
+        "Green Liberalism",
+        "Liberal Populism",
+        "Liberal Socialism"
+    ],
+    "Market Right": [
+        "Classical Liberalism",
+        "National Liberalism",
+        "Traditional Gaullism",
+        "Liberal Putinism",
+        "Right Anarchism",
+        "Right Libertarianism",
+        "Trumpism (Libertarian)",
+        "Neoliberalism",
+        "Ultra-Liberalism"
+    ],
+    "Conservative": [
+        "Bleeding Heart Putinism",
+        "Christian Conservatism",
+        "Classical Conservatism",
+        "Conservative Socialism",
+        "Constitutionalism",
+        "Fehlinger Doctrine",
+        "Islamic Democracy",
+        "National Conservatism",
+        "Neoconservatism",
+        "Right-Centrism",
+        "Right-Wing Populism",
+        "Populist Gaullism",
+        "Sovereign Democracy (Conservative)",
+        "Transitional Democracy",
+        "Trumpism (Conservative)"
+    ],
+    "Authoritarian Right": [
+        "Anocracy",
+        "Democratic Derzhavism",
+        "Left Pragmatism",
+        "Purification Administration",
+        "Radical Nationalism",
+        "Military Junta",
+        "Black-Hundredist Nationalism",
+        "Derzhavism",
+        "Chinese Exceptionalism",
+        "Military Democracy"
+    ],
+    "Despotic": [
+        "Assadist Ba'athism",
+        "Corporatocracy",
+        "Kadyrovite Tendency",
+        "Leonid Slutsky Thought",
+        "Neo-Imperial Putinism",
+        "Pax Americana",
+        "Putinism (Despotism)",
+        "Theocracy (Ideology)",
+        "Wahhabism",
+        "Davos System",
+        "Mafia State",
+        "Absolute Monarchy (Ideology)",
+        "Autocracy",
+        "Aristocratic Despotism"
+    ],
+    "Fascist": [
+        "Classical Fascism",
+        "Vichy Pétainism",
+        "Clerical Fascism",
+        "Confucian Hyperconservatism",
+        "Ecofascism",
+        "Ethnonationalism",
+        "Falangism",
+        "Fascist Populism",
+        "National Syndicalism",
+        "National Derzhavism",
+        "National Spartanism",
+        "Naturalized Derzhavism",
+        "Revivalist Derzhavism",
+        "Russian Syncrantism",
+        "Iraqi Ba'athism",
+        "National Bolshevism",
+        "Neo-Eurasianism (Right)",
+        "Identitarianism",
+        "Greater Russia System",
+        "Falun Dafa"
+    ],
+    "National Socialist": [
+        "Ultranationalism",
+        "Ultra-Putinism",
+        "Vladimir Zhirinovsky Thought",
+        "Accelerationism",
+        "Apocalypticism",
+        "Babylonian Nazism",
+        "Right-Wing Accelerationism",
+        "Salafism",
+        "Esoteric Nazism",
+        "Neo-Nazism",
+        "Carolingian Fascism",
+        "Obliteration Of The Self",
+        "Strasserism"
+    ]
+};
+
+const categories = [
+    "economics",
+    "resource_management",
+    "culture",
+    "authority",
+    "nation",
+    "foreign"
+];
+
+const labelColors = {
+    "No exact match": "#5C5C5C",
+    "Chekist Communism": "#7a0d0d",
+    "Digital Leninism": "#8f0e0e",
+    "Jacobinism": "#5c1a1a",
+    "Juche": "#C00000",
+    "Left-Wing Military Junta": "#4b3b1a",
+    "Maoism": "#EE1C25",
+    "Nazi-Maoism": "#3f1e1e",
+    "National Communism": "#a11d1d",
+    "Neo-Eurasianism (Left)": "#5e2a5e",
+    "Neo-Stalinism": "#A52A2A",
+    "Syncretic Communism": "#7a1f1f",
+    "Technocracy (TotSoc)": "#3a6f8f",
+    "Transhumanism": "#2b8f8f",
+    "Vanguardist Socialism": "#621313",
+    "Anti-Revisionist Communism": "#8a1c1c",
+    "Left-Wing Ba'athism": "#1f6b3a",
+    "Left-Wing Nationalism": "#7e3a1e",
+    "Gaddafism": "#0a6c2e",
+    "Li Zuocheng Thought": "#912424",
+    "Market Socialism": "#b5451f",
+    "Marxism-Leninism": "#c0392b",
+    "Neo-Socialism (Left)": "#6e1f6e",
+    "Neo-Soviet Putinism": "#4a2020",
+    "Popular Derzhavism": "#7a4a1f",
+    "Populist Sovietism": "#8f2020",
+    "Trotskyism": "#CC0000",
+    "Xi Jinping Thought": "#9e1c1c",
+    "Left-Wing Putinism": "#5a2020",
+    "Social Patriotism": "#8f3a3a",
+    "Anarcho-Communism": "#a11111",
+    "Communist Populism": "#b5451f",
+    "Confucian Socialism": "#9c2b2b",
+    "Democratic Socialism": "#E34234",
+    "Eco-Socialism": "#3c7a3c",
+    "Eurocommunism": "#a8452e",
+    "Labour Syndicalism": "#941313",
+    "Left Accelerationism": "#2f2f2f",
+    "Neo-Marxism": "#7a2f2f",
+    "Popular Front Socialism": "#8a1f1f",
+    "Sovereign Democracy (Left)": "#6b3f5e",
+    "Progressivism": "#c94ab0",
+    "Alexander Lukashenko Thought": "#7a1414",
+    "Green Politics": "#3f8f4f",
+    "Left-Centrism": "#c96a4a",
+    "Left-Wing Populism": "#c72c48",
+    "Social Democracy": "#FF3333",
+    "Reformist Socialism": "#d94f4f",
+    "Centrism": "#8899aa",
+    "Centrist Pluralism": "#997799",
+    "Christian Democracy": "#e0a030",
+    "Communitarianism": "#5588aa",
+    "Enforced Democracy": "#4466aa",
+    "Green Liberalism": "#4fa3a3",
+    "Liberal Populism": "#3355aa",
+    "Liberal Socialism": "#aa5577",
+    "Classical Liberalism": "#71beeb",
+    "National Liberalism": "#f2d43d",
+    "Traditional Gaullism": "#6a7fbf",
+    "Liberal Putinism": "#7a8fbf",
+    "Right Anarchism": "#D4CB20",
+    "Right Libertarianism": "#e0c840",
+    "Trumpism (Libertarian)": "#f2a900",
+    "Neoliberalism": "#54ABC7",
+    "Ultra-Liberalism": "#8f7fd0",
+    "Bleeding Heart Putinism": "#5588cc",
+    "Christian Conservatism": "#3355aa",
+    "Classical Conservatism": "#2f4f8f",
+    "Conservative Socialism": "#7a5a2f",
+    "Constitutionalism": "#4a5a7a",
+    "Fehlinger Doctrine": "#3f6f9f",
+    "Islamic Democracy": "#2f7a4f",
+    "National Conservatism": "#1f3f7a",
+    "Neoconservatism": "#4a6f9f",
+    "Right-Centrism": "#3D5A80",
+    "Right-Wing Populism": "#7a2f3f",
+    "Populist Gaullism": "#5f3f7a",
+    "Sovereign Democracy (Conservative)": "#8a4a2f",
+    "Transitional Democracy": "#5a7a9f",
+    "Trumpism (Conservative)": "#8f1f2f",
+    "Anocracy": "#6f6f6f",
+    "Democratic Derzhavism": "#8a6a2f",
+    "Left Pragmatism": "#7a4f4f",
+    "Purification Administration": "#7a1f1f",
+    "Radical Nationalism": "#5f1f1f",
+    "Military Junta": "#4f4f4f",
+    "Black-Hundredist Nationalism": "#2f1f0f",
+    "Derzhavism": "#8a7a2f",
+    "Chinese Exceptionalism": "#a11d1d",
+    "Military Democracy": "#5f5f4f",
+    "Assadist Ba'athism": "#1f5f2f",
+    "Corporatocracy": "#2f4f4f",
+    "Kadyrovite Tendency": "#4f2f2f",
+    "Leonid Slutsky Thought": "#6a1f2f",
+    "Neo-Imperial Putinism": "#3f2f2f",
+    "Pax Americana": "#6b5a2f",
+    "Putinism (Despotism)": "#3f4f6f",
+    "Theocracy (Ideology)": "#6f5f2f",
+    "Wahhabism": "#4f6f4f",
+    "Davos System": "#2f2f4f",
+    "Mafia State": "#3f1f1f",
+    "Absolute Monarchy (Ideology)": "#4a3b28",
+    "Autocracy": "#4f4f4f",
+    "Aristocratic Despotism": "#4a3b28",
+    "Classical Fascism": "#3f2f1f",
+    "Vichy Pétainism": "#2f2f5f",
+    "Clerical Fascism": "#4f3f1f",
+    "Confucian Hyperconservatism": "#5f2f1f",
+    "Ecofascism": "#1f4f1f",
+    "Ethnonationalism": "#5f1f1f",
+    "Falangism": "#8a1f1f",
+    "Fascist Populism": "#7a2f1f",
+    "National Syndicalism": "#4f1f1f",
+    "National Derzhavism": "#6a3f1f",
+    "National Spartanism": "#3f3f3f",
+    "Naturalized Derzhavism": "#5a4a2f",
+    "Revivalist Derzhavism": "#4a3f1f",
+    "Russian Syncrantism": "#6f2f2f",
+    "Iraqi Ba'athism": "#1f4f2f",
+    "National Bolshevism": "#3f2f2f",
+    "Neo-Eurasianism (Right)": "#5e2a5e",
+    "Identitarianism": "#2f2f2f",
+    "Greater Russia System": "#6a1f1f",
+    "Falun Dafa": "#7a5a1f",
+    "Ultranationalism": "#3f1f1f",
+    "Ultra-Putinism": "#2f1f2f",
+    "Vladimir Zhirinovsky Thought": "#5f1f2f",
+    "Accelerationism": "#1f1f1f",
+    "Apocalypticism": "#2f1f3f",
+    "Babylonian Nazism": "#1f0f0f",
+    "Right-Wing Accelerationism": "#0f2f3f",
+    "Salafism": "#1f3f1f",
+    "Esoteric Nazism": "#2f2f0f",
+    "Neo-Nazism": "#3f1f1f",
+    "Carolingian Fascism": "#503f29",
+    "Obliteration Of The Self": "#1f1f1f",
+    "Strasserism": "#3f1e1e"
+};
+
+const categoryTitles = {
+    "economics": "Economic systems",
+    "resource_management": "Resource management",
+    "culture": "Cultural values",
+    "authority": "Authority",
+    "nation": "National identity",
+    "foreign": "Foreign policy"
+};
+
+const descriptions = {
+    "welfare_capitalism": "A capitalist economy that includes extensive social welfare policies. It features a market-based system supported by a safety net, including public education, healthcare, and pensions.",
+    "laissez_faire": "An \"arms-off\" economic environment where transactions between private parties are free from government intervention, including regulations, privileges, tariffs, and subsidies.",
+    "countereconomics": "A revolutionary market anarchism that advocates for the creation of a society based on voluntary exchanges, primarily through black and grey markets.",
+    "state_capitalism": "A system where the state undertakes commercial economic activity and the means of production are organized and managed as state-owned enterprises.",
+    "dirigisme": "An economic system where the state exerts strong directive influence over investment and the market, rather than merely regulating it, common in mid-20th-century France.",
+    "keynesianism": "An economic theory advocating for increased government expenditures and lower taxes to stimulate demand and pull the global economy out of depression.",
+    "third_way": "A centrist position that attempts to reconcile right-wing and left-wing politics by advocating a synthesis of right-wing economics and left-wing social policies.",
+    "neo_corporatism": "A cooperative relationship between the government and major interest groups (like labor unions and business associations) to manage the national economy through negotiation.",
+    "corporatism": "The organization of society into corporate groups—such as agricultural, labor, or scientific—on the basis of their common interests or social functions.",
+    "social_corporatism": "A framework where the state organizes the economy into industrial sectors to facilitate cooperation between labor and capital, specifically empowering workers' syndicates over the bourgeoisie to ensure social equity.",
+    "yellow_socialism": "A model by Pierre Biétry as an alternative to \"Red\" Marxism. It organizes workers into unions that negotiate profit-sharing with business groups under a strong authoritarian state, emphasizing national cooperation over class war.",
+    "mutualism": "An anarchist school of thought advocating a society where each person might possess a means of production, with trade based on labor-value and mutual credit.",
+    "guild_socialism": "A movement advocating for worker control of industry through a system of national guilds in a reciprocal relationship with a state.",
+    "syndicalism": "A revolutionary strategy where workers' unions (syndicates) seize control of the economy through strikes and direct action to manage society.",
+    "market_socialism": "An economic system where the means of production are publicly or cooperatively owned, but production and consumption are guided by market forces.",
+    "mutual_distributism": "A hybrid focusing on the wide ownership of property (distributism) coupled with mutual aid and cooperative credit systems.",
+    "social_distributism": "A variant of distributism that emphasizes social justice and the common good, often utilizing state mechanisms to ensure property is widely distributed.",
+    "distributism": "An economic ideology holding that the world's productive assets should be widely owned rather than concentrated in the hands of the state or a few individuals.",
+    "social_capitalism": "A market economy balanced by robust social welfare programs and regulations. It seeks to preserve private enterprise while ensuring a high standard of living and reduced inequality through state intervention.",
+    "state_socialism": "An economic system where the state owns the means of production and manages the economy centrally. It aims to eliminate private profit in favor of state-led distribution and industrial development.",
+    "free_socialism": "A stateless, anti-authoritarian philosophy advocating for worker-owned cooperatives and decentralized planning. It rejects both private property and state control, favoring voluntary associations and direct democracy.",
+    "communization": "A theory suggesting the immediate abolition of the state, money, and social classes during a revolution. Rather than a transition period, it views the act of revolution as the direct creation of communism.",
+    "utopian_socialism": "An early socialist school based on moral or visionary grounds rather than class struggle. It envisions ideal, self-sustaining communities established through peaceful persuasion and voluntary cooperation rather than revolution.",
+    "agrarian_socialism": "A movement focusing on the redistribution of land to the peasantry and collective farming. It emphasizes rural communal living and views the farmer, rather than the urban worker, as the revolutionary lead.",
+    "feudalism": "A medieval social hierarchy based on land ownership and personal loyalty. Nobility granted land to vassals in exchange for military service, while peasants (serfs) lived on and worked the land for protection.",
+    "cameralism": "A form of state management where the economy is organized like a large household, focusing on maximizing the national treasury and resources through expert administrative oversight and centralized coordination.",
+    "free_market_distributism": "A variant of distributism that heavily relies on laissez-faire mechanisms. It argues that in a truly freed market without state privileges, corporate monopolies would naturally collapse, leading to a widespread distribution of small-scale property.",
+    "Voluntaryism": "A system where the state is prohibited from collecting taxes by force. It relies entirely on voluntary taxation, funding public services through consensual donations, lotteries, or service fees rather than mandatory levies.",
+    "lvt": "Land Value Tax is a levy on the unimproved value of land, excluding buildings or improvements. It discourages land speculation, promotes efficient usage, and captures socially created value for public benefit.",
+    "flat_taxation": "A tax system with a constant marginal rate, usually applied to personal or corporate income, where everyone pays the same percentage regardless of earnings.",
+    "Progressive_Taxation": "A tax system where the tax rate increases as the taxable amount increases, shifting the burden toward those with higher incomes.",
+    "Confiscatory_Taxation": "An extremely high tax rate—often near 100%—above a certain income threshold, intended to redistribute wealth or limit extreme inequality.",
+    "collective_distribution": "An economic principle where goods and services are allocated based on the needs or contributions of the community. It prioritizes shared access over individual ownership to ensure equitable resource management.",
+    "postmodernism": "A skeptical worldview that questions \"grand narratives,\" objective truth, and traditional authority, emphasizing the role of language, power, and individual perspective.",
+    "civil_liberalism": "A political philosophy emphasizing the protection of individual rights and civil liberties against state interference or social coercion.",
+    "progressivism": "A political philosophy based on the Idea of Progress, asserting that advancements in science, technology, and social organization can improve the human condition.",
+    "social_progressivism": "An emphasis on using government or social action to address social issues such as poverty, inequality, and discrimination to advance society.",
+    "conservative_liberalism": "A variant of liberalism that combines liberal values like freedom and individual rights with more conservative social and cultural stances.",
+    "liberal_conservatism": "A conservative ideology that incorporates liberal views on the economy and individual liberty while maintaining a commitment to traditional institutions.",
+    "progressive_conservatism": "A movement that seeks to combine conservative social principles with progressive policies designed to address social problems and improve living conditions.",
+    "conservatism": "political and social philosophy promoting traditional social institutions and practices, often skeptical of rapid social or political change.",
+    "reactionaryism": "A political viewpoint that favors a return to a previous political state of society, often opposing modern social and political developments.",
+    "paleoconservatism": "A traditionalist form of conservatism emphasizing national identity, regionalism, traditional morality, and an anti-interventionist foreign policy.",
+    "neoreactionaryism": "An anti-democratic movement that rejects the Enlightenment, advocating for a return to older forms of government like absolute monarchy or corporate governance, while maintaining technological advances.",
+    "traditionalism": "A philosophical school asserting a single, metaphysical Truth underlying all major religions. It rejects modernism and secularism, advocating for a return to sacred hierarchies, ancient rituals, and the primordial wisdom of the past.",
+    "reactionary_modernism": "A synthesis of historical social values and advanced technology, embracing industrial power and modern science to strengthen and protect the traditional or romantic heritage of a people.",
+    "theocracy": "A form of government in which a deity is recognized as the supreme ruling authority, giving guidance to human intermediaries who manage day-to-day affairs.",
+    "absolute": "A form of monarchy in which the monarch holds supreme autocratic authority, not restricted by written laws, a constitution, or custom.",
+    "totalitarianism": "A political system where the state recognizes no limits to its authority and strives to regulate every aspect of public and private life.",
+    "religious_authoritarianism": "A system where a dictator seeks political legitimacy by positioning themselves as the primary defender of a specific religion. It uses religious identity to unify the state and suppress dissent.",
+    "autocracy": "A system of government by one person with absolute power, where the ruler's decisions are subject to neither external legal restraints nor regularized mechanisms of popular control.",
+    "anarchism": "A political philosophy that advocates for self-governed societies based on voluntary institutions and the abolition of the state and all non-voluntary hierarchies.",
+    "partocracy": "A form of government where one political party dominate the political process and state apparatus rather than the citizens or individual representative",
+    "representative_democracy": "A system of government where all eligible citizens vote on representatives to pass laws and govern the country on their behalf.",
+    "direct_democracy": "A form of democracy in which people decide on policy initiatives directly, rather than through representatives.",
+    "constitutional": "A form of government where a monarch acts as the head of state within the parameters of a written or unwritten constitution. The monarch’s powers are legally limited, often serving as a symbolic or stabilizing national figurehead.",
+    "minarchism": "A libertarian political philosophy advocating for a \"night-watchman state,\" which only provides protection from aggression, theft, and contract violations.",
+    "meritocracy": "A social or political system in which power and responsibility are vested in individual people based on their demonstrated ability and talent.",
+    "technocracy": "A system of governance where decision-makers are selected on the basis of their expertise in a given area of responsibility, particularly scientific or technical knowledge.",
+    "stratocracy": "A form of government headed by military chiefs, where the military and the state are traditionally or constitutionally the same entity.",
+    "aristocracy": "A system where power is held by a distinguished class of citizens who possess the inherited status, education, and long-term land-based stakes required to provide stable governance for society.",
+    "anarcho_monarchism": "A social arrangement where a monarch exists solely to prevent the formation of a state, acting as a symbolic protector of a society based on individual liberty and voluntary cooperation.",
+    "neocameralism": "A structure where the state functions as a high-performance joint-stock corporation, managed by a professional executive and owned by shareholders to ensure maximum administrative efficiency and social order.",
+    "Internationalism": "A political principle advocating for greater political or economic cooperation among nations and peoples for the common good.",
+    "Cosmopolitanism": "The idea that all human beings are members of a single community, based on a shared morality that transcends national and local boundaries.",
+    "civic_nationalism": "A form of nationalism based on shared political values and citizenship within a state, rather than shared ethnicity or race.",
+    "cultural_nationalism": "A form of nationalism where the nation is defined by a shared culture—language, traditions, and heritage—rather than ancestry or race.",
+    "ethnic_nationalism": "A form of nationalism wherein the nation is defined in terms of ethnicity, which always includes some element of shared descent or ancestry.",
+    "pan_nationalism": "A form of nationalism dedicated to the unification of disparate groups into a single nation based on shared cultural, linguistic, or ethnic ties across borders.",
+    "racial_nationalism": "An ideology that defines national identity based on a specific race, often advocating for the preservation or dominance of that race.",
+    "Tribalism": "The rejection of nationalism in favor of a return to primitive, organic tribal identities. It prioritizes kinship, local lineage, and ancient communal bonds.",
+    "communitarianism": "A framework that prioritizes the local community as the primary source of identity, emphasizing that individual well-being and social stability are rooted in shared values and strong local bonds.",
+    "egoism": "A radical philosophy positing that individual self-interest is the only valid basis for action. It rejects all \"spooks\"—abstract concepts like the state, morality, or religion—that limit personal autonomy.",
+    "Isolationism": "A policy of remaining apart from the affairs or interests of other groups, especially the political affairs of other countries.",
+    "Non_Interventionism": "A foreign policy which holds that political rulers should avoid alliances with other nations and avoid all wars not related to direct self-defense.",
+    "Realpolitik": "A system of politics or principles based on practical rather than moral or ideological considerations.",
+    "Imperialism": "A policy of extending a country's power and influence through diplomacy, economic dominance, or military force over other territories.",
+    "Interventionism": "A policy of proactive activity undertaken by a nation-state to manipulate or influence the economy or politics of another country.",
+    "Globalism": "The operation or planning of economic and foreign policy on a global basis, favoring free trade, open borders, and international cooperation.",
+    "armed_neutrality": "A foreign policy where a nation refuses to take sides in a conflict but maintains a strong military to defend its sovereignty. It signals that any violation of neutrality will be met with force.",
+    "Chekist Communism": "A totalitarian socialist system in which state security agencies hold unlimited power over every sphere of life, from workplaces to private homes. Loyalty to party and Leader is absolute, foreign influence is treated as something to be purged, and the economy runs on Stalinist central planning enforced through fear, informants, and mass repression.",
+    "Digital Leninism": "A digital-age totalitarian socialism where AI-driven surveillance and censorship extend classical Leninist one-party rule into every corner of daily life, using technology to pursue total oversight and control of the population.",
+    "Jacobinism": "An authoritarian, populist descendant of the French Revolution that fuses civic nationalism and patriotism with far-left economic populism. To defend the revolution against its enemies, Jacobin regimes lean on mass surveillance, secret police, and informant networks, while courting popular support through wealth redistribution and social safety nets.",
+    "Juche": "A Korean form of Marxism-Leninism centered on national self-reliance and an independent economy. It holds that the popular masses are the driving force of history, but that the Leader is the sole legitimate mind of the masses, turning him into an absolute, unquestionable authority.",
+    "Left-Wing Military Junta": "A socialist government run directly by the armed forces, using centralized military command to pursue redistribution and levelling of class distinctions.",
+    "Maoism": "An advanced form of Marxism-Leninism built on protracted people's war against capitalist states, a cultural revolution to purge bourgeois influence, and a vanguard party that both leads the masses and consolidates the dictatorship of the proletariat.",
+    "Nazi-Maoism": "A fringe Italian synthesis founded by Franco Freda in the late 1960s that draws from both the far-left and far-right, combining revolutionary economics with staunch nationalism and the revitalization of an ethnically pure, powerful Italy.",
+    "National Communism": "A framework that fuses communism with strong national identity and patriotism, aiming for working-class economic power alongside preservation of national cultural heritage and sovereignty; its Chinese variant goes further, recasting Mao as a symbol of national spiritual rebirth against Western cultural influence rather than of international proletarian revolution.",
+    "Neo-Eurasianism (Left)": "A post-Soviet ideology that positions itself against Eurocentric liberal ('Atlanticist') hegemony, opposes homogenizing mankind, and instead champions the cultural and ethnic diversity of the Eurasian continent. Staunchly anti-capitalist and pro-collectivist, it seeks to unify Eurasia against Atlanticist influence by any available method.",
+    "Neo-Stalinism": "A revival of Stalinist governance drawing on a strong centralized state and authoritarian methods to reach social goals, emphasizing state control, central planning, and nationalization of key industries as necessary for stability and socialist advancement.",
+    "Syncretic Communism": "A distinctly Russian ideology combining totality of the state with the Socialist Security State model, using high-tech authoritarian methods such as widespread surveillance and internet censorship to control and monitor citizens across every part of society.",
+    "Technocracy (TotSoc)": "Rule by engineers, scientists, data analysts, and industrial managers who treat governance as a series of engineering problems to be optimized. Elections and ideological pluralism are viewed as chaotic and irrational, and the state becomes a machine whose rulers pursue 'system optimization' without hesitation to eliminate whatever they see as irrational resistance.",
+    "Transhumanism": "An ideology arguing for the modification and enhancement of the human mind, body, and soul through technological means, envisioning a transformed post-human future, pursued here without regard for the human cost of getting there.",
+    "Vanguardist Socialism": "A form of socialism that argues for the totality of the state above all else, using the entire country's resources to build a Socialist Security State, generally relying on high-tech authoritarian tools such as widespread surveillance and internet censorship.",
+    "Anti-Revisionist Communism": "A reaction to movements claiming to be Marxism's heirs, defined as much by what it refuses as by what it affirms: it upholds the fundamental tenets of the original revolutionary doctrine and vehemently opposes any integration of capitalist economic principles into socialist societies.",
+    "Left-Wing Ba'athism": "An ideology combining socialism with Arab nationalism, focused on social justice, equality, and unity among Arab nations. It seeks to redress socio-economic disparities through redistribution of wealth and resources, public ownership of key industries, and expanded social welfare programs.",
+    "Left-Wing Nationalism": "A broad term for movements that combine leftist economics, such as redistribution of wealth, nationalization of major industries, and class struggle, with nationalism, typically used by developing countries to unite people against perceived colonial aggression while pursuing leftist domestic reform.",
+    "Gaddafism": "Muammar Gaddafi's political ideology and system of governance, rooted in Arab nationalism, socialism, and Islamic values, most fully outlined in the Green Book's vision of Jamahiriya, a 'state of the masses' where power resides in people's congresses and committees rather than parties or parliaments.",
+    "Li Zuocheng Thought": "Just as Mao once reunified a fractured China, this ideology casts a modern military leader as rejuvenating the nation through reform of its political system and ethical framework, reintroducing a state of permanent mobilization that fuses the military into peacetime life, with expansionist ambition reminiscent of past golden eras.",
+    "Market Socialism": "Often called Dengism, this covers socialist thought that incorporates markets into a socialist economy, arguing that a country not yet ready for full central planning must adopt certain capitalist reforms to develop its productive forces, while participating in the global economy and allowing private business under continued state direction.",
+    "Marxism-Leninism": "The ideology behind most 20th-century communist movements and the official doctrine of the Soviet Union, calling for the overthrow of capitalism and its replacement with a transitional dictatorship of the proletariat that will eventually give way to communism.",
+    "Neo-Socialism (Left)": "A modern form of socialism that departs from classical Marxism by arguing that class is not the sole or primary contradiction in society; race, sexuality, and gender are also treated as fundamental contradictions that must be resolved before communism can be achieved.",
+    "Neo-Soviet Putinism": "An ideology with no publicly documented program, treated as a shadowy, unimplemented offshoot of Putinist thought oriented toward reviving Soviet-era structures and discipline.",
+    "Popular Derzhavism": "A revisionist, left-leaning branch of Derzhavist thought holding that the Soviet era of Russia retains some value, blending harder-line socialist ideas from around the world with core Derzhavist tenets such as Russian nationalism and personalist dictatorship; considered the weakest strain of the Derzhavist movement.",
+    "Populist Sovietism": "A political style in which a leader presents himself as guardian of a lost, idealized era of dignity, social justice, and collective purpose, drawing on the emotional memory of Soviet stability and shared sacrifice rather than a strict revival of Marxist-Leninist doctrine, to claim symbolic and moral legitimacy.",
+    "Xi Jinping Thought": "A doctrine holding that an all-encompassing ruling party must lead every aspect of society, using strict promotion mechanisms and continual anti-corruption campaigns to preserve the ideological purity of the vanguard, while invoking 'common prosperity' and 'national rejuvenation' to answer rising national pride and demands for social justice.",
+    "Left-Wing Putinism": "A more people-centered reading of Putinist doctrine envisioning a genuine social state, drawing on 21st-century socialism and elements of the Soviet experience alongside distinctly Russian nationalist and Eurasianist ambitions, while nurturing nostalgia for the Soviet era.",
+    "Trotskyism": "An ideological framework rooted in the ideas of Leon Trotsky, emphasizing the need for a global working-class revolution to overthrow capitalist systems and establish a worldwide socialist society, rejecting the concept of socialism in one country in favor of permanent, international revolution.",
+    "Social Patriotism": "An ideology fusing deep patriotism with a commitment to social cohesion and national unity, emphasizing the preservation of cultural heritage and territorial integrity, and prioritizing the collective good of the nation over individual gain.",
+    "Anarcho-Communism": "A left anarchist ideology advocating the abolition of the state, capitalism, wage labor, social hierarchies, and private property, in favor of direct democracy and horizontally organized economies.",
+    "Communist Populism": "An ideological synthesis of the Marxist-Leninist tradition with populist narrative, remaining within the bounds of radical socialist criticism of capitalism and class expropriation, but in form and tactics acting as a simplified, pragmatic, people-oriented version of Leninism, more tolerant of procedural democracy and market instruments.",
+    "Confucian Socialism": "A synthesis of the class struggle and socialist principles championed by Mao and Deng with the benevolent governance and moral teachings of Confucius and Mencius, aiming to unite the people around self-cultivation, family regulation, state governance, and world peace.",
+    "Democratic Socialism": "Also called Reformist Socialism, an ideology arguing for building socialism from within the liberal parliamentary system, through electoral politics, worker cooperatives, and worker self-management, seeking to transform capitalism into a decentralized, worker-run economy while curbing its excesses in the present.",
+    "Eco-Socialism": "Also known as Green Socialism, a syncretic ideology holding that the ever-expanding nature of capitalism causes environmental degradation and is incompatible with the ecological requirements of civilization; it calls for the abolition of capitalism and globalization in favor of egalitarianism, social progressivism, and common ownership of production.",
+    "Eurocommunism": "A political-ideological project of Marxism positioned between Leninism and democratic socialism, developed by some Western European communist organizations in a reformist, democratic sense, closer to a social middle class and a multi-party parliamentary model, embodying a 'third way' between Marxism-Leninism and social democracy.",
+    "Labour Syndicalism": "An ideology combining traditional socialist principles with governance through labour unions and other worker organizations, often highly decentralized, with the state playing a supporting rather than a controlling role.",
+    "Left Accelerationism": "An ideology born from the contradictions of late-stage capitalism, holding that the only way forward is by accelerating technological development, automation, and economic progress in order to transcend capitalism itself, rather than trying to destroy it outright or return to an imagined past.",
+    "Neo-Marxism": "An ideological movement that reinterprets traditional Marxist theory to address its perceived limitations, still advocating a radical, socialist transformation of society but expanding classical Marxism's focus on class to also examine race, gender, and sexuality as intersecting forms of oppression.",
+    "Popular Front Socialism": "A broad coalition movement that embraces as many socialist ideas as possible to foster unity among left-wing forces and their supporters; while individually unstable, such coalitions can endure and achieve significant goals if they rally around a shared ideal of socialist democracy.",
+    "Sovereign Democracy (Left)": "A niche ideology aiming to create a 'perfect' democracy that ignores Western-style party bickering, where competing parties nonetheless cooperate for the good of the state and civil society checks corrupt or unpatriotic officials. Its left-leaning form favors a more closed market akin to the Soviet era, appealing to those who want a return of 'communism' without its downsides.",
+    "Progressivism": "A socially liberal, identity-politics-based ideology seeking social justice through government intervention and public programs, largely associated with social justice and feminist movements, generally supportive of expanded funding for education, science, the arts, and public health.",
+    "Alexander Lukashenko Thought": "A flexible governing style, more a policy than a strict ideology, in which a strong autocrat or president tries to solve society's problems and build a socially just economy focused on supporting the people, evaluating every official by loyalty and effectiveness alike, while the leader's own position remains untouchable.",
+    "Green Politics": "Also called Environmentalism, an ideology focused on combating human-caused climate change and conserving nature, seeking a self-sustainable society built on conservationism, non-violence, grassroots democracy, and social justice.",
+    "Left-Centrism": "Also known as centre-left politics, a wide array of ideologies spanning social democracy, progressivism, social liberalism, and environmentalism, united through syncretism; it leans toward the political center relative to far-left beliefs, supporting a mixed economy, strong economic interventionism, welfare capitalism, pro-unionism, open-border immigration policy, and multiculturalism.",
+    "Left-Wing Populism": "An ideology combining populist rhetoric and themes with leftist politics: anti-elitist, skeptical of globalism, and anti-establishment. Strongly anti-militaristic in origin, it seeks to close the wealth gap through redistribution, social programs, and a larger role for government.",
+    "Social Democracy": "A left-of-center political, social, and economic philosophy that advocates economic and social interventions to promote social justice within a capitalist-oriented mixed economy, serving as an umbrella for democracies blending socialist and capitalist policy, sometimes overlapping with social progressivism.",
+    "Reformist Socialism": "A political ideology operating within a fundamentally capitalist framework that does not aim for the immediate abolition of markets. Its proponents put democracy first, stressing that workers should have a real say, and at least some influence, over the production of the goods and services they create, generally through partnership between political parties and labor unions.",
+    "Centrism": "A political ideology serving as a middle ground between the traditional left and right, structured around compromise and rejecting political extremism on all sides; centrist governments promote bipartisanship and moderate socio-economic positions, valuing political stability above all else, though an ineffective centrist government tends to collapse quickly.",
+    "Centrist Pluralism": "A concept of political organization based on recognizing the diversity of ideological positions within a single institutional and cultural structure. Rather than seeking compromise between left and right, it proceeds from coexistence: positions from social democracy to radical nationalism can share the same democratic space, provided all sides reject political violence and mutually respect one another.",
+    "Christian Democracy": "A political ideology based on modern democratic ideas and traditional Christian values and ethics, influenced by Catholic social teaching as well as neo-Calvinism; in practice, often centre-right on cultural, social, and moral issues but centre-left with respect to economic and labor issues, civil rights, foreign policy, and the environment.",
+    "Communitarianism": "An ideology standing for a communitarian ethic of freedom of speech and optimization of power, aiming at a more liberal platform without Western-style founding assumptions, pursuing a 'healthier' form of liberalism suited to its own national context.",
+    "Enforced Democracy": "An authoritarian-adjacent process by which democratic principles are imposed through foreign intervention, typically by outside powers or international organizations, aiming to replace an autocratic regime with a democratic framework, often accompanied by military intervention or diplomatic pressure, at the risk of provoking local resistance or insurgency.",
+    "Green Liberalism": "An ideology combining the principles of liberalism with a strong emphasis on environmental sustainability and ecological responsibility, seeking to promote individual freedom and economic prosperity while protecting and preserving the natural world.",
+    "Liberal Populism": "A variant of liberalism combined with populist and patriotic rhetoric that positions government as protector of national statehood and identity, seeking to combine patriotism with democratic institutions, typically the most centrist and diverse of its populist family, using free-market economics tempered by concessions to coalition partners for the sake of social stability.",
+    "Liberal Socialism": "A political philosophy incorporating liberal principles into socialism, treating liberalism as the theory that takes the inner freedom of the human spirit as its starting point and adopts liberty as goal, means, and rule of shared life, while seeing socialism as the method for realizing that freedom through political and economic autonomy and emancipation from material necessity.",
+    "Classical Liberalism": "A political ideology advocating civil liberties under the rule of law with an emphasis on economic freedom, developed in the early 19th century in response to urbanization and the Industrial Revolution, closely following Adam Smith and the beliefs of utilitarianism, natural law, the social contract, and natural rights.",
+    "National Liberalism": "A variant of liberalism combining liberal policy with civic nationalism, cultural heritage, and commitment to the nation-state, seeking to reconcile individual freedoms with shared national identity, supporting limited government intervention in the economy and the free market while still favoring social progressivism within a national cultural framework, fueled by patriotism and concern for order and national security.",
+    "Traditional Gaullism": "A subset of Gaullist thought emphasizing national values as one of the essential aspects of national identity that, alongside republican institutions, must be protected, aligning more with classical civic nationalism than with the right-wing populist trends increasingly common in the 21st century, in hopes of preserving traditional values while containing the world's other great powers.",
+    "Liberal Putinism": "A more flexible successor to earlier, stricter Putinist administrations, easing pre-war and wartime controls to encourage internal debate, greater transparency, and improved public healthcare, while still maintaining an illusion of limited freedom to manage public disenchantment with continued Kremlin rule and censorship.",
+    "Right Anarchism": "Also commonly known as anarcho-capitalism, a political philosophy advocating the market above all else and complete abolition of the state, holding that in the absence of government, private property, courts, and defense would all be handled competitively through a voluntary, self-regulating society.",
+    "Right Libertarianism": "Also called libertarian capitalism, a right-wing ideology defending the free market, private property, and small government, generally seeking a major reversal of the welfare state and expansion of negative rights, rooted in the homestead principle and the labor theory of property with an emphasis on self-ownership.",
+    "Trumpism (Libertarian)": "A political movement encompassing the ideologies associated with Donald Trump and his supporters, including right-wing populism, right-wing anti-globalism, national conservatism, and neo-nationalism, characterized here by a libertarian-leaning emphasis on deregulation, cutting federal overreach, and business-oriented policy.",
+    "Neoliberalism": "Also known as the Washington Consensus, the dominant post-Cold War ideology diametrically opposed to leftism, seeking market reforms such as removing price controls, privatizing state industries, deregulating capital markets, and lowering trade barriers, while using progressive social positions on LGBT, feminist, and minority rights to spread its markets globally.",
+    "Ultra-Liberalism": "Also called Radical Liberalism, a subset of social liberalism that develops in a country as democracy comes under threat or autocratization increases, positing that liberal values must be secured by any means necessary, even suppression of dissent or a one-party state, while still supporting globalism, free movement of goods and people, and a pro-corporate mixed economy.",
+    "Bleeding Heart Putinism": "A more flexible approach than stricter predecessor systems, easing the harsh policies of the pre-war and wartime eras while still stopping short of full democracy, encouraging debate within a controlled political front, greater transparency, and improved public healthcare, aiming to ease public disenchantment with continued centralized rule.",
+    "Christian Conservatism": "A Christian political movement seeking to influence politics and public policy through its interpretation of Christian teaching, notable for advancing socially conservative positions such as school prayer, Christian nationalism, and temperance, while traditionally opposing sex education, abortion, embryonic stem cell research, euthanasia, contraception, homosexuality, and pornography.",
+    "Classical Conservatism": "Also called Traditional Conservatism, a political and social philosophy emphasizing transcendent moral principles manifested through natural laws that society should prudently follow, based on Aristotle's and Edmund Burke's political thought, valuing social ties and the preservation of ancestral institutions above what it sees as excessive individualism.",
+    "Conservative Socialism": "Also called Bourgeois Socialism or Paternalistic Conservatism, an ideology combining elements of socialism with right-wing conservative values, supporting traditional family structures, religious belief, and national identity alongside government intervention in economic affairs, more accepting of markets and private enterprise than orthodox socialism.",
+    "Constitutionalism": "An ideology proposing that the foundational basis of a country is not up for negotiation, opposing social and economic change that would depart from the nation's founding vision; while sometimes called stagnant, under its rule businesses know their place and rights, giving the economy confidence in the government.",
+    "Fehlinger Doctrine": "A foreign-policy-focused ideology calling for the dismantling of designated 'hostile states' along existing internal administrative lines into new, smaller market democracies, fully integrated into international institutions, modeled on the post-Yugoslav breakup as a template for success.",
+    "Islamic Democracy": "Also known as Islamic Liberalism, a halfway point between secularism and Sharia-based democracy, attempting to merge the ideas of the Quran with Western liberal ideas such as democracy, human rights, pluralism, and the rule of law, while proponents still believe Islam should play a strong role in state affairs.",
+    "National Conservatism": "A political ideology placing the nation, its history, culture, and people at the center of political life, prioritizing it over abstract universal values or international norms; unlike traditional conservatism's focus on institutional stability, it actively uses state power for national renewal, skeptical of globalization and supranational institutions, favoring strong borders, controlled immigration, and protectionist economic policy.",
+    "Neoconservatism": "A political movement born in the United States in the 1960s among liberal hawks disillusioned with the increasingly pacifist foreign policy of the Democratic Party and the New Left, typically advocating the promotion of democracy and interventionism abroad, peace through strength, and hostility to communism and political radicalism.",
+    "Right-Centrism": "Also called the Centre-right, a syncretic mix of right-wing ideologies holding moderate positions close to the political center, favoring a mixed-market economy that values free-market principles with a degree of government intervention, usually socially conservative but willing to compromise on social issues and restrict individual liberty in the name of national security or stability.",
+    "Right-Wing Populism": "An ideology combining populist rhetoric with right-wing ideas, traditionally anti-elitist, anti-establishment, nationalist, and nativist, blaming immigration, globalism, and liberal values for societal decline and offering tighter immigration control, high tariffs, and a return to traditional values, often paired with strong economic protectionism.",
+    "Populist Gaullism": "A synthesis of the nationalism and 'peace through strength' attitude of traditional Gaullism with the 21st-century wave of right-wing populism, seen by its followers as a return to tradition tying itself to broader Western populist movements, even as critics call it a betrayal of Gaullism's original ideals.",
+    "Sovereign Democracy (Conservative)": "A niche ideology aiming to create a 'perfect' democracy that ignores Western-style party bickering, where civil society serves as a check on corrupt or unpatriotic officials; its right-leaning form favors a more open market, albeit with a nationalized sector of key industries, catering to a nationalistic crowd without any racial supremacism.",
+    "Transitional Democracy": "Also called Democratization, the period in which an authoritarian government transitions into a stable democratic one, often achieved by force to safeguard against internal or external threats, involving major political, social, and institutional change including free elections, free speech, protection of human rights, and rule of law, though frequently accompanied by civil unrest.",
+    "Trumpism (Conservative)": "A political movement encompassing the ideologies associated with Donald Trump and his supporters, including right-wing populism, right-wing anti-globalism, national conservatism, and neo-nationalism, characterized by strong illiberal beliefs, reliance on national values, natalism, and America First policy, with populists forming the movement's core.",
+    "Anocracy": "Often called a Hybrid Regime, a loosely-defined form of government mixing democratic and autocratic elements; while allowing some semi-democratic processes such as elections, it also enforces undemocratic laws, and while not usually as corrupt or oppressive as pure autocracies, remains prone to committing similarly drastic actions.",
+    "Democratic Derzhavism": "The belief that democracy without nationalism is savagery, and nationalism without democracy is slavery. Its adherents primarily believe in creating a national democracy where equal opportunities are given to national forces to compete in debates and elections, even though its practical application rarely resembles genuine democracy, viewing the current state as a stepping stone toward eventual liberalization once all anti-national opposition has been dealt with.",
+    "Left Pragmatism": "An ideology with no publicly documented program, treated within Authoritarian Democracy as a pragmatic, non-doctrinaire left-leaning current distinct from more rigid socialist currents.",
+    "Purification Administration": "An ideology built around casting democracy as a cherished, embattled principle under threat from sinister and reactionary elements, calling for constant vigilance and vowing to 'purify' the nation's democratic mission regardless of the sacrifice required, often centered on a singular emblematic leader figure.",
+    "Radical Nationalism": "An ideological movement placing utmost importance on the nation as the central unit of social and political organization, advocating for the preservation and advancement of a particular nation's identity, culture, and interests above all else, seeking to promote national welfare and sovereignty often through radical, autocratic means.",
+    "Military Junta": "A government led by a committee of military leaders; the term is now used broadly to describe an authoritarian government characterized by oligarchic military dictatorship, distinguished from other forms of authoritarian rule by collective military command.",
+    "Black-Hundredist Nationalism": "A highly authoritarian, ultranationalist, reactionary, monarchist, and economically conservative ideology based on the early-20th-century Black Hundreds movement, combining monarchism, ethnic nationalism, and traditionalism as a reaction against neo-Bolshevism and globalization, rooted in fierce support for a ruling dynasty and extremist, xenophobic and prejudiced views.",
+    "Derzhavism": "The doctrine of complete subordination of state power to the will of a single figure appointed as 'political passionary' who steers society, combining ultranationalism with total isolation of the country from the outside world; in economics it splits between preserving full state control or building a form of national capitalism dominated by state-favored monopolies.",
+    "Chinese Exceptionalism": "A concept emphasizing the unique historical, cultural, and political characteristics that distinguish China from other nations, rooted in the country's millennia-old civilization and a perceived cultural, and at times racial, superiority, framing it as the moral duty of the Han people to carry out China's rise to what some proponents believe can only be achieved through struggle.",
+    "Military Democracy": "Essentially a military junta with an elective system layered on top; society under such an ideology is highly militaristic, with military service regarded as a mark of social status, usually forming during wartime before transitioning to either a democratic or a fully authoritarian system.",
+    "Assadist Ba'athism": "Also called the Corrective Movement, a term describing the policies of the Assad dynasty; rooted in pan-Arab socialist Ba'athism but evolved into its own distinct form, combining secularism, Arab nationalism, and socialism with heavy economic pragmatism, prioritizing a strong centralized bureaucratic state and the suppression of dissent through Popular Fronts loyal to a single party.",
+    "Corporatocracy": "A term describing an economic, political, and judicial system controlled by corporations or corporate interests, in which business corporations exert significant, if not total, control over government.",
+    "Kadyrovite Tendency": "An offshoot of Putinism shaped heavily by Chechen leadership, retaining the core policies of its parent ideology while infusing them with national specifics and a strong personalistic touch. It relies heavily on traditional values and religion, strongly opposes dissent and disloyalty, and holds that power should be concentrated in a strong leader who is always right, even when he isn't.",
+    "Leonid Slutsky Thought": "A distinct, more moderate and democratic take on nationalist doctrine championed by a leader of a more pragmatic nationalist wing, aiming to enhance citizens' freedom and security through recognizing the need for some civil liberties and reforms, while remaining hawkish and protectionist in both foreign and domestic affairs to maintain loyalty and control.",
+    "Neo-Imperial Putinism": "An ideology with no publicly documented program, treated as an unimplemented imperial-restorationist offshoot of Putinist doctrine.",
+    "Pax Americana": "An ideology arguing that the flaw lies in human nature itself rather than in the systems built to contain it, born from the cooperative fusion of neoliberal and neoconservative rules-based order, seeking to reinsert itself permanently into the global order. To the outside world it presents as a nation regaining sanity under the banner of democracy, while behind the scenes men in suits, corporations, federal agencies, and old power networks quietly predetermine the fate of millions to preserve their order.",
+    "Putinism (Despotism)": "The culmination of Vladimir Putin's ideals: an apolitical authoritarian democracy, heavily technocratic and state-capitalist with an emphasis on the free market, in which the state fights for Russia's security by whatever means necessary while nurturing patriotism, traditional values, and national unity, and pursuing 'The Russian World' and a multi-polar international order.",
+    "Theocracy (Ideology)": "A rare form of government recognizing one or more deities as supreme ruling authorities, with human 'intermediaries' managing everyday governmental affairs. Most theocratic governments are socially conservative, viewing the modern world as decadent and in need of purification from sin.",
+    "Wahhabism": "A Sunni Islamic revivalist and fundamentalist movement associated with the reformist doctrines of 18th-century scholar Muhammad ibn Abd al-Wahhab, variously described as orthodox, puritanical, and revolutionary, and as an Islamic reform movement aiming to restore what its followers see as pure, monotheistic worship.",
+    "Davos System": "A set of ideas and principles held by a very limited circle of the world's richest and most powerful individuals, who conclude that the only way to preserve their wealth and power amid a changing world order is to seize control of the transition themselves, striving to establish control over every aspect of human life through absolute digitalization, surveillance, and integration of transnational corporate power over the world economy.",
+    "Mafia State": "A state in which most of the government apparatus is itself involved in organized crime; such states are heavily corrupt and inefficient, serving mainly to enrich the ruling class and its followers.",
+    "Absolute Monarchy (Ideology)": "A belief in minimizing government and restricting it to local administration, with federal or, ideally, imperial rule resting in the hands of a respected and wise monarch who alone governs and protects the country, wielding absolute power whenever deemed necessary.",
+    "Autocracy": "Not an ideology in the conventional sense; autocrats care only about acquiring and maintaining power, using whatever reactionary schools of thought are useful to suppress liberal, communist, and nationalist rivals, holding that every path to power is justified.",
+    "Classical Fascism": "The original fascist ideology as developed in Italy by Giovanni Gentile and Benito Mussolini, rooted in nationalism, corporatism, and a drive toward territorial expansion and imperialism, promoting a corporatist economy in which employer and employee syndicates collaborate under state guidance to resolve class conflict, while denouncing socialism, Strasserism, National Bolshevism, and classical liberal individualism alike.",
+    "Vichy Pétainism": "An ideology seeking to reconcile the collaborationist regime of Philippe Pétain's French State with his 'Révolution nationale', characterized by anti-parliamentarism, a cult of personality, promotion of traditional values, and state-sponsored antisemitism, viewing the French Republic as a corrupt system that embodies the 'Anti-France' and hoping to topple contemporary liberal democracy through the ideals of Travail, Famille, Patrie.",
+    "Clerical Fascism": "An ideological movement combining the principles of fascism with the influence of religious clergy and institutions, seeking to establish a totalitarian state led by a charismatic figure who embodies both political and religious authority, fusing religion and politics into a hierarchical social order maintained by the state and religious institutions together.",
+    "Confucian Hyperconservatism": "Also known as the Self-Revival Movement, an extreme form of political and social conservatism rooted in Confucian philosophy and traditional social hierarchy, opposing modernization as antithetical to Chinese culture, supporting authoritarian governance, paternalism, and a strong centralized bureaucracy under a wise and virtuous ruler, fervently anti-communist and anti-liberal.",
+    "Ecofascism": "A syncretic ideology combining far-right politics with environmentalism, most concerned with over-industrialization and what its adherents see as postmodernism destroying both the traditional way of life and the planet; citing overpopulation, many ecofascists invoke 'lifeboat ethics' to justify eliminating populations they blame for environmental harm, believing the only way to save the human race is through eugenics and the destruction of modern industrial society.",
+    "Ethnonationalism": "A form of nationalism wherein the nation and nationality are defined in terms of ethnicity, emphasizing an ethnocentric approach to political issues tied to the affirmation of a particular ethnic group, holding that nations are defined by shared heritage, including common language, faith, and ancestry.",
+    "Falangism": "A sub-variant of Classical Fascism originating in, but not limited to, Spain, stressing a Roman Catholic religious identity and the supreme authority of the state over the nation, emphasizing strong social hierarchies, hyperconservatism, anti-communism, anti-liberalism, and traditionalism, calling for a national syndicalist economy that includes agrarian reform, industrialism, and respect for private property under corporatist coordination.",
+    "Fascist Populism": "A political style in which a charismatic leader positions himself as the singular embodiment of the nation and the sole remedy to its perceived decline, selectively borrowing elements of the fascist tradition, such as national rebirth and exaltation of unity, while softening or rebranding its more rigid ideological commitments to appeal both to those seeking stability and to more exclusionary, authoritarian-minded supporters.",
+    "National Syndicalism": "A far-right adaptation of syndicalism suited to the agenda of revolutionary nationalism, rejecting bourgeois values, democracy, liberalism, Marxism, internationalism, and pacifism, while promoting heroism, vitalism, and violence in pursuit of a 'pure' proletarian nation able to push back against globalist and internationalist socialist order.",
+    "National Derzhavism": "An ideology holding that the National Revolution must be fought for the soul and nature of the nation itself, not merely for society, insisting the nation must become a fortress admitting no dissent, with only the leader and fellow comrades as anchors; it emphasizes the revolutionary and cultural-revival aspects of Derzhavism, focused on reviving national culture and transforming the homeland into a warrior state under a powerful individual.",
+    "National Spartanism": "An ideology that rejects the modern lifestyle, espousing a rejection of modern comforts and luxury in favor of spiritual awakening; in an ideal neo-Spartanist society a person lives a minimalistic life working for the betterment of both himself and the nation, using ancient Sparta's collectivist and militaristic identity as the model to build upon.",
+    "Naturalized Derzhavism": "Proof that Derzhavist methods, while distinctly Russian in origin, can be exported elsewhere; states that adopt Derzhavist practices are often closely allied to or directly sponsored by a parent Derzhavist regime, and while implementation varies by national character, the core beliefs include extreme nationalism and often dictatorial rule under a strong national party leading a cultural revival.",
+    "Revivalist Derzhavism": "An ideology placing great emphasis on a nation's religious roots, radically reinterpreting the concept of a besieged 'fortress' homeland as a katechonic force, the leading power standing against the forces of the Antichrist; it holds that the nation must be battle-ready and sacrificial to stop the forces of evil, viewing other faiths as aligned with the enemy and unafraid to militarize both religion and religious institutions in pursuit of a sacred crusade.",
+    "Russian Syncrantism": "A specific syncretic set of ideas combining nationalist aspects of the old Russian Empire with social aspects of the Soviet Union, born from the ashes of the Soviet collapse during a period of broad anti-Yeltsin opposition, in which otherwise rival political currents found common ground; despite espousing some socialist views, it dismisses most Marxists as puppets of globalism and Russophobia.",
+    "Iraqi Ba'athism": "A political ideology rooted in Arab nationalism, socialism, and secularism, focused on the specific principles espoused by the Ba'ath Party in Iraq, seeking to unite the Arab world under a single secular state prioritizing Arab unity and economic equality, highly militaristic and anti-Zionist, with resistance movements continuing to invoke it after the fall of the original Ba'athist government.",
+    "National Bolshevism": "An ideological framework combining nationalism and socialism to forge a path beyond the traditional left-right divide, rejecting the liberal democratic model in favor of a strong centralized state that prioritizes the interests of the nation and its people, emphasizing national identity, cultural heritage, and sovereignty alongside social justice, economic equality, and workers' rights.",
+    "Neo-Eurasianism (Right)": "An ideology born of post-Soviet political thought positioning itself against Global Eurocentric Liberalism, which it dubs 'Atlanticism' and its attempt to establish hegemony of the rimland over the heartland peoples; it opposes the uniformization of mankind, instead cherishing and safeguarding the cultural and ethnical diversity of the continent, staunchly anti-capitalist and pro-collectivist in pursuit of Eurasian unity.",
+    "Identitarianism": "A more Euro-centric form of ethnic nationalism born from the Nouvelle Droite, created as an alternative to older traditionalist, ethnopluralist, and illiberal politics in order to distance itself from Fascism and Nazism; it advocates an ostensibly non-hierarchical global separatism in which differences between peoples are preserved, while prioritizing white Europeans and opposing perceived threats to the Western world, aiming to establish ethno-spheres that would eventually replace existing nation-states.",
+    "Greater Russia System": "An ideology with no publicly documented program, treated within Fascism as an ultranationalist Russian irredentist and restorationist current.",
+    "Falun Dafa": "The belief system of the Falun Gong, a Chinese new religious movement syncretizing Buddhism, Taoism, and traditional qigong practice around truthfulness, compassion, and forbearance; certain circles within it promote fervent xenophobia and the idea of racial purity of the Han people, with the founder deified and cast as guiding a 'Great Revival' opposing interracial marriage, homosexuality, hyperconservatism, and modern medicine.",
+    "Ultranationalism": "An extreme and radical form of nationalism promoting the belief in the superiority of one's own nation or ethnic group above all others, emphasizing the preservation of cultural, racial, and territorial identity at all costs, often advocating aggressive, expansionist foreign policy bordering on xenophobia and authoritarianism.",
+    "Ultra-Putinism": "An ideology with no publicly documented program, treated as a maximalist, uncompromising evolution of Putinist doctrine beyond even its already authoritarian mainstream form.",
+    "Vladimir Zhirinovsky Thought": "Also called Imperial Thought, an ideology standing for the revival of the Russian people based on traditional values, cleansing of society, glorification of the military, and destruction of liberal and communist ideas; it centers on a cult of a charismatic leader, advocates sovereign economic pragmatism combining a strong state sector with private business, and complete import substitution, drawing support from conservatives, monarchists, nationalists, and fascists united solely by loyalty to the leader's ideas.",
+    "Accelerationism": "The idea that capitalism, or processes associated with it, should be drastically 'accelerated' and intensified to force radical social change or bring about capitalism's collapse; its adherents support sabotage, mass killings, and assassination of high-profile targets to destabilize and destroy what they see as a system upholding a Jewish and multicultural world order.",
+    "Apocalypticism": "A belief system centered on cosmic cataclysm and divine reckoning, envisioning a climactic, final act of human history involving trial, tribulation, and ultimate salvation, rooted in religious prophecy and dividing the universe into forces of good and evil locked in inevitable, catastrophic confrontation.",
+    "Babylonian Nazism": "Also known as the Babylonian Ethos, a syncretic mixture of traditional Satanism, Left-Hand occultist practice, and esoteric National Socialism, calling for a militaristic, pagan social order to combat what it calls the Magian/Nazarene world order, organized through global terrorist cells and belief in an entity that will be released to defeat Judeo-Christianity, framed through a period of 'cosmic evolution' guided by sinister dialectics.",
+    "Right-Wing Accelerationism": "A hyper-capitalist, techno-futurist philosophy viewing unfettered market expansion, automation, and decentralized systems as an unstoppable force that will dismantle obsolete political and social structures, opposing democracy as a barrier to development and supporting faster economic and technological disruption toward a post-human future guided by corporate and cybernetic power.",
+    "Salafism": "A political branch of Sunni Islam advocating a return to the traditions of the 'ancestors,' the first three generations of Muslims held to know the unadulterated, pure form of Islam, rejecting religious innovation and supporting the implementation of sharia based on the earliest years of the faith.",
+    "Esoteric Nazism": "A series of interpretations of National Socialism combining mysticism and neo-paganism, usually of Norse or Baltic variation, taking heavy inspiration from runic symbolism; originating among high-ranking Nazi officials during the Second World War, later ideologues proposed that Hitler could be deified after Nazi Germany's fall, and the movement today survives largely within certain white nationalist and neo-pagan circles.",
+    "Neo-Nazism": "A modern-day offshoot of National Socialism, less formal and rougher than its predecessor, revolving around the ultranationalist and racial-supremacist ideas central to the original National Socialist German Workers' Party, advocating the empowerment of a racially defined in-group while seeking a 'pure' state for them alone.",
+    "Carolingian Fascism": "An esoteric, eclectic form of French nationalism entrenched in National Socialist roots, believing that those of a certain designated 'race' are subhumans dragging down European culture; it draws on the idea of a greater France encompassing the borders of Charlemagne's empire as the basis for French Lebensraum, described by outsiders as more a personality cult around a single leader than a fixed doctrine, with only loathing for those it deems subhuman remaining constant.",
+    "Obliteration Of The Self": "An ideology centered on the complete eradication of individual identity, desires, and personal attachments, rooted in various philosophical and spiritual traditions such as Buddhism, Shintoism, and Eastern mysticism, advocating abandonment of the ego and even a 'death-worship' of the dignity of death; in its modern political form it hijacks these spiritual ideas to force compliance with the state, building a hivemind around martyrdom to achieve dissolution of the self.",
+    "Strasserism": "A rival, worker-based strain of Nazism popular among several neo-Nazi movements worldwide, viewing capitalist society as an inherently exploitative system controlling the proletariat, and advocating a more economically radical, worker-oriented approach to National Socialist economics.",
+    "Aristocratic Despotism": "A restoration of hereditary rule by a noble class, governing the population much as in pre-modern aristocratic society, with birth and lineage as the basis of political legitimacy."
+};
+
+const iconSources = {
+    "welfare_capitalism": "https://www.veryicon.com/icons/miscellaneous/yuantong-icon/8-public-welfare-relief.html",
+    "countereconomics": "https://commons.wikimedia.org/wiki/File:Agorism-symbol.svg",
+    "dirigisme": "https://quark88.github.io/ideosorter/",
+    "third_way": "https://quark88.github.io/ideosorter/",
+    "yellow_socialism": "https://quark88.github.io/ideosorter/",
+    "mutualism": "https://commons.wikimedia.org/wiki/File:Mutualismo.svg",
+    "guild_socialism": "https://www.reddit.com/r/leftistvexillology/comments/1cex7kz/my_take_on_a_flag_for_guild_socialism/",
+    "syndicalism": "https://commons.wikimedia.org/wiki/File:Hammer_Torch_and_Cog_Syndicalism.png",
+    "market_socialism": "https://www.reddit.com/r/leftistvexillology/comments/1kqh025/market_socialism_flag3_versions/",
+    "mutual_distributism": "https://commons.wikimedia.org/wiki/File:Hound_of_Distributism.svg",
+    "social_distributism": "https://commons.wikimedia.org/wiki/File:Hound_of_Distributism.svg",
+    "distributism": "https://commons.wikimedia.org/wiki/File:Hound_of_Distributism.svg",
+    "social_capitalism": "https://polcompball.wiki/Social_Capitalism",
+    "state_socialism": "https://polcompball.wiki/Socialism",
+    "free_socialism": "https://commons.wikimedia.org/wiki/File:%D0%9B%D0%BE%D0%B3%D0%BE%D1%82%D0%B8%D0%BF_%D0%9F%D0%A1%D0%A0%D0%9C.svg",
+    "communization": "https://www.deviantart.com/neobolshevik/art/Communization-theory-Flag-1206433111",
+    "utopian_socialism": "https://www.reddit.com/r/leftistvexillology/comments/1cryitt/possible_flags_for_the_utopian_community_of/",
+    "agrarian_socialism": "https://polcompball.wiki/Agrarian_Socialism",
+    "feudalism": "https://en.wikipedia.org/wiki/File:Flag_of_medieval_France.png",
+    "Voluntaryism": "https://en.wikipedia.org/wiki/File:VforVoluntary_normal.svg",
+    "lvt": "https://www.reddit.com/r/georgism/comments/ffs4yt/inspired_by_uwufflytimes_design_on_rvexillology_i/",
+    "collective_distribution": "https://commons.wikimedia.org/wiki/File:Hammer_and_sickle.svg",
+    "postmodernism": "https://commons.wikimedia.org/wiki/File:Chaos_star.svg",
+    "civil_liberalism": "https://www.reddit.com/r/vexillology/comments/10jfwzi/flag_for_liberalism/",
+    "progressivism": "https://philosophyball.miraheze.org/wiki/Progressivism",
+    "social_progressivism": "https://commons.wikimedia.org/wiki/File:Eiserne_Front_Symbol.svg",
+    "conservative_liberalism": "https://polcompball.wiki/Conservative_Liberalism",
+    "liberal_conservatism": "https://polcompball.wiki/Liberal_Conservatism",
+    "progressive_conservatism": "https://polcompball.wiki/Progressive_Conservatism",
+    "conservatism": "https://commons.wikimedia.org/wiki/File:Republicanlogo.svg",
+    "reactionaryism": "https://polcompball.wiki/Reactionaryism",
+    "paleoconservatism": "https://www.reddit.com/r/vexillology/comments/i80yuz/flag_for_the_american_paleoconservative_movement/",
+    "neoreactionaryism": "https://polcompball.wiki/Neoreactionaryism",
+    "reactionary_modernism": "https://polcompball.wiki/Reactionary_Modernism",
+    "theocracy": "https://commons.wikimedia.org/wiki/File:Emblem_of_the_Holy_See_(vatican.va).svg",
+    "totalitarianism": "https://commons.wikimedia.org/wiki/File:Flag_of_the_National_Fascist_Party_(PNF)_variant_2.svg",
+    "religious_authoritarianism": "https://commons.wikimedia.org/wiki/File:Cross_Santiago.svg",
+    "anarchism": "https://commons.wikimedia.org/wiki/File:Anarchy-symbol.svg",
+    "partocracy": "https://commons.wikimedia.org/wiki/File:Lenin-Silhoutte_.svg",
+    "minarchism": "https://commons.wikimedia.org/wiki/File:Gadsden_flag.svg",
+    "meritocracy": "https://commons.wikimedia.org/wiki/File:Meritocracy_symbol.jpg",
+    "technocracy": "https://commons.wikimedia.org/wiki/File:TechnocracyMonad.svg",
+    "stratocracy": "https://commons.wikimedia.org/wiki/File:Coat_of_Arms_of_the_Hellenic_Republic_(1973-1974).svg",
+    "anarcho_monarchism": "https://www.reddit.com/r/vexillology/comments/aqt0of/flag_of_anarchomonarchy/",
+    "Cosmopolitanism": "https://commons.wikimedia.org/wiki/File:International_Flag_of_Planet_Earth.svg",
+    "civic_nationalism": "https://polcompball.wiki/Civic_Nationalism",
+    "cultural_nationalism": "https://polcompball.wiki/Cultural_Nationalism",
+    "ethnic_nationalism": "https://polcompball.wiki/Ethnonationalism",
+    "pan_nationalism": "https://polcompball.wiki/Irredentism",
+    "racial_nationalism": "https://polcompball.wiki/Racial_Nationalism",
+    "Tribalism": "https://polcompball.wiki/Tribalism",
+    "communitarianism": "https://polcompball.wiki/Communitarianism",
+    "Isolationism": "https://polcompball.wiki/Isolationism",
+    "Imperialism": "https://polcompball.wiki/Imperialism",
+    "Interventionism": "https://commons.wikimedia.org/wiki/File:Flag_of_NATO.svg",
+    "Globalism": "https://commons.wikimedia.org/wiki/File:Flag_of_the_United_Nations.svg"
+};
+
+</script>
+
+<script>
+const questionsByCategory = {
+    "economics": [
+        { 
+            "id": "e1", 
+            "text": "Once you seize power, how will the factories, farms, and land of the nation be organized?", 
+            "options": [ 
+                { "text": "Private ownership, with firms competing freely on the open market", "next": "e2.1" }, 
+                { "text": "The state seizes the means of production outright", "next": "e2.2" },
+                { "text": "Ownership passes directly to the workers and local communes", "next": "e2.3" },
+                { "text": "Every sector is folded into a single, state-organized industrial machine", "next": "e2.4" },
+                { "text": "Property is broken up and spread widely among small owners", "next": "e2.5" },
+                { "text": "A traditional hierarchy of land, lords, and loyalty, as in ages past", "next": "feudalism" }
+            ] 
+        },
+        { 
+            "id": "e2.1", 
+            "text": "How far should the Party or state reach into this free market?", 
+            "options": [ 
+                { "text": "Not at all — let the market run itself completely", "next": "e3.1" }, 
+                { "text": "A light safety net and basic regulation, nothing more", "next": "welfare_capitalism" },
+                { "text": "Heavy regulation and steep taxation in the name of equity", "next": "social_capitalism" },
+                { "text": "The state actively steers the market's direction without owning it outright", "next": "e3.2" }
+            ] 
+        },
+        { 
+            "id": "e3.1", 
+            "text": "What is this untouched market ultimately for?", 
+            "options": [ 
+                { "text": "Order under a minimal legal framework, nothing else", "next": "laissez_faire" }, 
+                { "text": "A weapon to route around, and eventually dissolve, the state itself", "next": "countereconomics" }
+            ] 
+        },
+        { 
+            "id": "e3.2", 
+            "text": "By what method does the state steer the economy from behind the scenes?", 
+            "options": [ 
+                { "text": "Managing demand through spending and fiscal policy", "next": "keynesianism" }, 
+                { "text": "Blending market competition with social justice down the middle", "next": "third_way" },
+                { "text": "Directing investment through technocratic industrial planning", "next": "dirigisme" },
+                { "text": "Brokering cooperation between the state, industry, and organized labor", "next": "neo_corporatism" }
+            ] 
+        },
+        { 
+            "id": "e2.2", 
+            "text": "Why does the state seize the means of production?", 
+            "options": [ 
+                { "text": "To build wealth and power for the nation-state itself", "next": "state_capitalism" }, 
+                { "text": "To meet the people's needs and abolish the profit motive entirely", "next": "state_socialism" }
+            ] 
+        },
+        { 
+            "id": "e2.3", 
+            "text": "How is this worker-run economy actually structured on the ground?", 
+            "options": [ 
+                { "text": "Decentralized, anti-authoritarian self-management by the workers themselves", "next": "e3.3" }, 
+                { "text": "The immediate abolition of money, wages, and the value-form altogether", "next": "communization" },
+                { "text": "Small, voluntary utopian communities built from scratch", "next": "utopian_socialism" },
+                { "text": "Social ownership, but goods still change hands through markets", "next": "market_socialism" }
+            ] 
+        },
+        { 
+            "id": "e3.3", 
+            "text": "What mechanism actually runs this decentralized economy day to day?", 
+            "options": [ 
+                { "text": "Direct 'labor for labor' exchange between workers", "next": "mutualism" }, 
+                { "text": "A federation of militant industrial unions", "next": "syndicalism" },
+                { "text": "Craft guilds that answer to no one above them", "next": "guild_socialism" },
+                { "text": "Free communities bound only by liberty and voluntary cooperation", "next": "free_socialism" }
+            ] 
+        },
+        { 
+            "id": "e2.4", 
+            "text": "What is the true purpose of folding all industry into the state machine?", 
+            "options": [ 
+                { "text": "Subordinating every private interest to the national cause", "next": "corporatism" }, 
+                { "text": "Handing state-backed workers' syndicates power over the old bourgeoisie", "next": "social_corporatism" },
+                { "text": "Maximizing the treasury through sheer administrative efficiency", "next": "cameralism" },
+                { "text": "Building parallel, state-friendly unions that share profits with management", "next": "yellow_socialism" }
+            ] 
+        },
+        { 
+            "id": "e2.5", 
+            "text": "This wide spread of small ownership — which direction does it lean?", 
+            "options": [ 
+                { "text": "Left-leaning: cooperatives, land redistribution, agrarian reform", "next": "e3.5" }, 
+                { "text": "Right-leaning: free markets and traditional property rights", "next": "e3.6" }
+            ] 
+        },
+        { 
+            "id": "e3.5", 
+            "text": "How should this left-leaning distributed property actually be arranged?", 
+            "options": [ 
+                { "text": "Build the economy around the peasantry and small farms", "next": "agrarian_socialism" }, 
+                { "text": "Use the state to smash large concentrations of capital", "next": "social_distributism" },
+                { "text": "Mutual-aid banks and local cooperatives", "next": "mutual_distributism" }
+            ] 
+        },
+        { 
+            "id": "e3.6", 
+            "text": "How should this right-leaning distributed property be maintained?", 
+            "options": [ 
+                { "text": "'Small is beautiful' — minimal state involvement", "next": "distributism" },
+                { "text": "Fully free markets and voluntary contracts, no state involvement at all", "next": "free_market_distributism" }
+            ] 
+        },
+        { "id": "welfare_capitalism" },
+        { "id": "social_capitalism" },
+        { "id": "laissez_faire" },
+        { "id": "countereconomics" },
+        { "id": "state_capitalism" },
+        { "id": "state_socialism" },
+        { "id": "dirigisme" },
+        { "id": "keynesianism" },
+        { "id": "third_way" },
+        { "id": "neo_corporatism" },
+        { "id": "corporatism" },
+        { "id": "social_corporatism" },
+        { "id": "yellow_socialism" },
+        { "id": "mutualism" },
+        { "id": "guild_socialism" },
+        { "id": "syndicalism" },
+        { "id": "market_socialism" },
+        { "id": "free_socialism" },
+        { "id": "communization" },
+        { "id": "utopian_socialism" },
+        { "id": "mutual_distributism" },
+        { "id": "social_distributism" },
+        { "id": "agrarian_socialism" },
+        { "id": "distributism" },
+        { "id": "feudalism" },
+        { "id": "cameralism" },
+        { "id": "free_market_distributism" }
+    ],
+    "resource_management": [
+        { 
+            "id": "r1", 
+            "text": "How does your regime fund the war machine and the common purse?", 
+            "options": [ 
+                { "text": "Levies on human productivity — income, profit, or trade.", "next": "r2.1" }, 
+                { "text": "A single levy on land and natural resources; labor and capital go untouched.", "next": "lvt" },
+                { "text": "Abolish the line between private and public wealth entirely; all resources are managed collectively.", "next": "collective_distribution" },
+                { "text": "No mandatory levies at all — funding is strictly voluntary.", "next": "Voluntaryism" }
+            ] 
+        },
+        { 
+            "id": "r2.1", 
+            "text": "How is the burden of these productivity-based levies actually structured?", 
+            "options": [ 
+                { "text": "A flat, uniform rate for everyone, to stay neutral.", "next": "flat_taxation" }, 
+                { "text": "A progressive scale that rises with economic capacity.", "next": "Progressive_Taxation" },
+                { "text": "Confiscatory rates on extreme wealth or inheritance, to prevent economic dynasties.", "next": "Confiscatory_Taxation" }
+            ] 
+        },
+        { "id": "Voluntaryism" },
+        { "id": "lvt" },
+        { "id": "flat_taxation" },
+        { "id": "Progressive_Taxation" },
+        { "id": "Confiscatory_Taxation" },
+        { "id": "collective_distribution" }
+    ],
+    "culture": [
+        { 
+            "id": "c1", 
+            "text": "Where is human civilization actually headed, in your view?", 
+            "options": [ 
+                { "text": "Steadily toward greater reason, liberty, and the correction of old prejudices.", "next": "c2.1" }, 
+                { "text": "We must preserve inherited wisdom while allowing only cautious, incremental change.", "next": "c2.2" },
+                { "text": "Modernity itself is failing — spiritually hollow, in a state of terminal decay.", "next": "c2.3" },
+                { "text": "There is no objective truth or progress, only competing narratives and power structures to tear down.", "next": "postmodernism" }
+            ] 
+        },
+        { 
+            "id": "c2.1", 
+            "text": "What should this march of progress actually aim for?", 
+            "options": [ 
+                { "text": "A neutral state guaranteeing equal rights regardless of culture or ethnicity", "next": "civil_liberalism" },
+                { "text": "Maximum individual freedom to define one's own lifestyle, free of old dogma", "next": "progressivism" },
+                { "text": "Actively dismantling historical hierarchies and power structures for true equity", "next": "social_progressivism" }
+            ] 
+        },
+        { 
+            "id": "c2.2", 
+            "text": "What holds society together, if not radical change?", 
+            "options": [ 
+                { "text": "The old ways are best preserved by simply leaving people alone.", "next": "conservative_liberalism" },
+                { "text": "A blend of freedom with active encouragement of family and religious tradition", "next": "liberal_conservatism" },
+                { "text": "Accept social change, but only channel it through established institutions", "next": "progressive_conservatism" },
+                { "text": "Strict adherence to the customs, faith, and history of one's own nation and people", "next": "conservatism" }
+            ] 
+        },
+
+        { 
+            "id": "c2.3", 
+            "text": "Given the decay of the modern era, what is to be done?", 
+            "options": [ 
+                { "text": "Return to the social order and political structures of a specific golden age", "next": "reactionaryism" },
+                { "text": "Reject globalism and foreign entanglement in favor of localism and national sovereignty", "next": "paleoconservatism" },
+                { "text": "Dismiss democratic squabbling in favor of a clear, centralized, technocratic authority", "next": "neoreactionaryism" },
+                { "text": "Fuse romantic, traditionalist values with modern technology and industrial might", "next": "reactionary_modernism" },
+                { "text": "Reject the secular world for the sacred, ancient truths of past civilizations", "next": "traditionalism" }
+            ] 
+        },
+        { "id": "postmodernism" },
+        { "id": "civil_liberalism" },
+        { "id": "progressivism" },
+        { "id": "social_progressivism" },
+        { "id": "conservative_liberalism" },
+        { "id": "liberal_conservatism" },
+        { "id": "progressive_conservatism" },
+        { "id": "conservatism" },
+        { "id": "reactionaryism" },
+        { "id": "paleoconservatism" },
+        { "id": "neoreactionaryism" },
+        { "id": "traditionalism" },
+        { "id": "reactionary_modernism" }
+    ],
+    "authority": [
+        { 
+            "id": "a1", 
+            "text": "How tightly should the regime grip the individual citizen?", 
+            "options": [ 
+                { "text": "The state is necessary to organize society and keep order", "next": "a2.1" },
+                { "text": "The state should exist only to protect property and safety", "next": "minarchism" },
+                { "text": "Not at all — the state itself is illegitimate", "next": "a2.2" }
+            ] 
+        },
+        { 
+            "id": "a2.1", 
+            "text": "How is this governing power actually structured?", 
+            "options": [ 
+                { "text": "Concentrated in a single central executive or Leader", "next": "a3.1" },
+                { "text": "Shared between a Monarch and a Parliament", "next": "constitutional" },
+                { "text": "Held by a distinct class of the 'best' or 'noble' citizens", "next": "a3.2" },
+                { "text": "Exercised by the people themselves or their elected representatives", "next": "a3.3" }
+            ] 
+        },
+        { 
+            "id": "a2.2", 
+            "text": "In a stateless order, what role does a leader still play?", 
+            "options": [ 
+                { "text": "None — total horizontal organization, no leaders at all", "next": "anarchism" },
+                { "text": "A symbolic, protective monarch who keeps any new state from forming", "next": "anarcho_monarchism" }
+            ] 
+        },
+        { 
+            "id": "a3.1", 
+            "text": "Where does this central Leader's authority actually come from?", 
+            "options": [ 
+                { "text": "A traditional sovereign ruling by bloodline", "next": "absolute" },
+                { "text": "A leader whose mandate comes from religious law or divine right", "next": "a4.2" },
+                { "text": "A modern secular autocrat", "next": "a4.3" },
+                { "text": "A joint-stock corporation, governed like a company by its CEO", "next": "neocameralism" }
+            ] 
+        },
+        { 
+            "id": "a4.2", 
+            "text": "How exactly is religious authority applied to the state?", 
+            "options": [ 
+                { "text": "The priesthood rules the state directly", "next": "theocracy" },
+                { "text": "A secular leader governs according to religious principle", "next": "religious_authoritarianism" }
+            ] 
+        },
+        { 
+            "id": "a4.3", 
+            "text": "How far does this secular autocrat's grip actually extend?", 
+            "options": [ 
+                { "text": "Total — the state controls every corner of public and private life", "next": "totalitarianism" },
+                { "text": "Power is concentrated at the top, but private life stays largely untouched", "next": "autocracy" }
+            ] 
+        },
+        { 
+            "id": "a3.2", 
+            "text": "What actually qualifies this ruling elite to hold power?", 
+            "options": [ 
+                { "text": "Inherited status and noble bloodline", "next": "aristocracy" },
+                { "text": "Scientific and technical expertise", "next": "technocracy" },
+                { "text": "Demonstrated talent, achievement, or intellect", "next": "meritocracy" },
+                { "text": "Rank and command within the military", "next": "stratocracy" }
+            ] 
+        },
+        { 
+            "id": "a3.3", 
+            "text": "How does the will of the people actually get exercised?", 
+            "options": [ 
+                { "text": "Citizens vote directly on every major law and policy", "next": "direct_democracy" },
+                { "text": "Citizens elect officials to decide on their behalf", "next": "representative_democracy" },
+                { "text": "Through a single revolutionary party claiming to represent the working class", "next": "partocracy" }
+            ] 
+        },
+        { "id": "theocracy" },
+        { "id": "absolute" },
+        { "id": "constitutional" },
+        { "id": "totalitarianism" },
+        { "id": "religious_authoritarianism" },
+        { "id": "autocracy" },
+        { "id": "anarchism" },
+        { "id": "minarchism" },
+        { "id": "partocracy" },
+        { "id": "meritocracy" },
+        { "id": "technocracy" },
+        { "id": "representative_democracy" },
+        { "id": "direct_democracy" },
+        { "id": "stratocracy" },
+        { "id": "aristocracy" },
+        { "id": "anarcho_monarchism" },
+        { "id": "neocameralism" }
+    ],
+    "nation": [
+        { 
+            "id": "n1", 
+            "text": "Where does your true loyalty ultimately lie?", 
+            "options": [ 
+                { "text": "The global human community as a whole", "next": "n2.1" }, 
+                { "text": "A shared legal system, set of values, or common culture", "next": "n2.2" },
+                { "text": "The local community and the social bonds right in front of you", "next": "communitarianism" },
+                { "text": "Blood, ancestry, and shared descent", "next": "n2.3" },
+                { "text": "The unique, sovereign self, above any collective", "next": "egoism" }
+            ] 
+        },
+        {
+        "id": "n2.1", 
+            "text": "How should this global community actually be organized?", 
+            "options": [ 
+                { "text": "A cooperative system of sovereign nations working together.", "next": "Internationalism" },
+                { "text": "A single borderless world where everyone is simply a citizen of humanity.", "next": "Cosmopolitanism" }
+            ] 
+        },
+        {
+        "id": "n2.2", 
+            "text": "What actually defines this shared national bond?", 
+            "options": [ 
+                { "text": "Loyalty to the Constitution, the rule of law, and civic duty.", "next": "civic_nationalism" },
+                { "text": "A shared language, religion, and historical heritage.", "next": "cultural_nationalism" }
+            ] 
+        },
+        {
+        "id": "n2.3", 
+            "text": "At what scale should this bond of blood actually be organized?", 
+            "options": [ 
+                { "text": "The local, organic clan or kin-group", "next": "Tribalism" },
+                { "text": "One ethnic people bound to their historic homeland and state", "next": "ethnic_nationalism" },
+                { "text": "A broad family of related ethnicities", "next": "pan_nationalism" },
+                { "text": "The entire race as one unit, transcending any single ethnicity or nation", "next": "racial_nationalism" }
+            ] 
+        },
+        { "id": "Internationalism" },
+        { "id": "Cosmopolitanism" },
+        { "id": "civic_nationalism" },
+        { "id": "cultural_nationalism" },
+        { "id": "ethnic_nationalism" },
+        { "id": "pan_nationalism" },
+        { "id": "racial_nationalism" },
+        { "id": "Tribalism" },
+        { "id": "egoism" },
+        { "id": "communitarianism" }
+    ],
+    "foreign": [
+        { 
+            "id": "f1", 
+            "text": "What should your nation's flag mean on the world stage?", 
+            "options": [ 
+                { "text": "Guarding our own borders and staying self-sufficient", "next": "f2.1" },
+                { "text": "Playing the balance of power to secure our survival and advantage", "next": "f2.2" },
+                { "text": "Spreading our values, or holding up global stability for everyone's sake", "next": "f2.3" }
+            ] 
+        },
+        { 
+            "id": "f2.1", 
+            "text": "How much should we actually engage with the outside world?", 
+            "options": [ 
+                { "text": "No political, military, or meaningful economic ties whatsoever", "next": "Isolationism" },
+                { "text": "Trade and talk freely, but never intervene in anyone else's wars or conflicts", "next": "Non_Interventionism" },
+                { "text": "Keep the army sharp and ready, but avoid every foreign alliance and entanglement.", "next": "armed_neutrality" }
+            ] 
+        },
+        { 
+            "id": "f2.2", 
+            "text": "How do we actually project our influence abroad?", 
+            "options": [ 
+                { "text": "Form alliances purely out of self-interest, regardless of who we're dealing with", "next": "Realpolitik" },
+                { "text": "Actively expand our territory or seize other nations' resources and politics for our own gain", "next": "Imperialism" }
+            ] 
+        },
+        { 
+            "id": "f2.3", 
+            "text": "How should we lead the wider world?", 
+            "options": [ 
+                { "text": "Use our military and political weight to step into foreign conflicts, stopping bad actors or defending human rights", "next": "Interventionism" },
+                { "text": "Push toward a single global system of law, open borders, and international governing bodies", "next": "Globalism" }
+            ] 
+        },
+        { "id": "Isolationism" },
+        { "id": "Non_Interventionism" },
+        { "id": "Realpolitik" },
+        { "id": "Imperialism" },
+        { "id": "Interventionism" },
+        { "id": "Globalism" },
+        { "id": "armed_neutrality" }
+    ]
+}
+;
+</script>
+
+<script>
+/* ---------------- view routing ---------------- */
+let previousView = 'home';
+function showView(name, opts) {
+    document.querySelectorAll('.view').forEach(v => v.classList.remove('active'));
+    document.getElementById('view-' + name).classList.add('active');
+    window.scrollTo(0, 0);
+}
+
+/* ---------------- quiz engine ---------------- */
+let categoryOrder = ["economics", "resource_management", "culture", "authority", "nation", "foreign"];
+let currentCategoryIndex = 0;
+let currentQuestions = {};
+let quizResults = {};
+
+function startQuiz() {
+    currentCategoryIndex = 0;
+    quizResults = {};
+    showView('quiz');
+    startCategory(categoryOrder[currentCategoryIndex]);
+}
+
+function startCategory(category) {
+    currentQuestions = {};
+    questionsByCategory[category].forEach(q => currentQuestions[q.id] = q);
+    const firstId = questionsByCategory[category][0].id;
+    renderNode(currentQuestions[firstId]);
+}
+
+function selectOption(nextId) {
+    const category = categoryOrder[currentCategoryIndex];
+    const node = currentQuestions[nextId];
+
+    if (!node.options) {
+        quizResults[category] = node.id;
+        currentCategoryIndex++;
+
+        if (currentCategoryIndex < categoryOrder.length) {
+            startCategory(categoryOrder[currentCategoryIndex]);
+        } else {
+            renderResults();
+            showView('results');
+        }
+    } else {
+        renderNode(node);
+    }
+}
+
+function renderNode(node) {
+    const questionEl = document.getElementById('question');
+    const buttonsDiv = document.getElementById('quiz-buttons');
+
+    buttonsDiv.innerHTML = '';
+    questionEl.textContent = node.text || "";
+    if (node.options && node.options.length > 3) {
+        buttonsDiv.classList.add('multi-column');
+    } else {
+        buttonsDiv.classList.remove('multi-column');
+    }
+
+    node.options.forEach(opt => {
+        const btn = document.createElement('button');
+        btn.textContent = opt.text;
+        if (opt.color) btn.style.backgroundColor = opt.color;
+        btn.onclick = () => selectOption(opt.next);
+        buttonsDiv.appendChild(btn);
+    });
+}
+
+/* ---------------- results ---------------- */
+function renderResults() {
+    const container = document.getElementById('results-container');
+    container.innerHTML = '';
+    const userResults = Object.values(quizResults);
+
+    categories.forEach(category => {
+        const resultValue = quizResults[category];
+        if (resultValue) {
+            const wrapper = document.createElement('a');
+            wrapper.className = 'result-item';
+            wrapper.href = 'javascript:void(0)';
+            wrapper.style.textDecoration = 'none';
+            wrapper.style.color = 'inherit';
+            wrapper.onclick = () => openDescription(resultValue, category, null, 'results');
+
+            const name = document.createElement('p');
+            name.textContent = (resultsMapping[category][resultValue] || resultValue).replace(/_/g, ' ');
+            name.className = 'result-text';
+
+            wrapper.appendChild(name);
+            container.appendChild(wrapper);
+        }
+    });
+
+    const matchedKey = Object.keys(labelMapping).find(key => {
+        const requiredParts = key.split('|');
+        return requiredParts.every(part => userResults.includes(part));
+    });
+
+    const finalLabel = matchedKey ? labelMapping[matchedKey] : "No exact match";
+    const labelDiv = document.getElementById('label');
+    labelDiv.innerHTML = '';
+    const labelLink = document.createElement('a');
+    labelLink.href = 'javascript:void(0)';
+    labelLink.style.color = 'inherit';
+    labelLink.style.textDecoration = 'none';
+    labelLink.style.display = 'block';
+    labelLink.textContent = finalLabel;
+    labelLink.onclick = () => openDescription(finalLabel, null, 'ideology', 'results');
+    labelDiv.appendChild(labelLink);
+    labelDiv.className = "label-bubble";
+    labelDiv.style.backgroundColor = labelColors[finalLabel] || "#7a7a7a";
+
+    const secondaryLabelDiv = document.getElementById('secondary-label');
+    secondaryLabelDiv.innerHTML = '';
+
+    const scoredLabels = Object.keys(labelMapping)
+        .map(key => {
+            const requiredParts = key.split('|');
+            let score = 0;
+            let penalty = 0;
+
+            requiredParts.forEach(reqVal => {
+                const category = Object.keys(resultsMapping).find(cat => resultsMapping[cat][reqVal]);
+                const userVal = quizResults[category];
+
+                if (!userVal) return;
+
+                const userGroup = Object.keys(subCategories[category] || {}).find(group =>
+                    subCategories[category][group].includes(userVal)
+                );
+                const reqGroup = Object.keys(subCategories[category] || {}).find(group =>
+                    subCategories[category][group].includes(reqVal)
+                );
+
+                if (userVal === reqVal) {
+                    score += 1.0;
+                }
+                else if (userGroup && userGroup === reqGroup) {
+                    score += 0.5;
+                }
+
+                if (userGroup && reqGroup && incompatibleSubCategories[userGroup]?.includes(reqGroup)) {
+                    penalty = -100;
+                }
+            });
+
+            return { key, label: labelMapping[key], score: score + penalty };
+        })
+        .sort((a, b) => b.score - a.score)
+        .filter(item => item.label !== finalLabel);
+
+    const uniqueScoredLabels = [];
+    const seenLabels = new Set();
+    for (const item of scoredLabels) {
+        if (!seenLabels.has(item.label)) {
+            seenLabels.add(item.label);
+            uniqueScoredLabels.push(item);
+        }
+    }
+
+    if (uniqueScoredLabels.length > 0) {
+        const nextMatch = uniqueScoredLabels[0];
+        const secLink = document.createElement('a');
+        secLink.href = 'javascript:void(0)';
+        secLink.style.color = 'inherit';
+        secLink.style.textDecoration = 'none';
+        secLink.style.display = 'block';
+        secLink.textContent = `Next closest match: ${nextMatch.label}`;
+        secLink.onclick = () => openDescription(nextMatch.label, null, 'ideology', 'results');
+        secondaryLabelDiv.appendChild(secLink);
+        secondaryLabelDiv.className = "label-bubble";
+        secondaryLabelDiv.style.display = "inline-block";
+        secondaryLabelDiv.style.borderColor = labelColors[nextMatch.label] || "#7a7a7a";
+        secondaryLabelDiv.style.color = labelColors[nextMatch.label] || "#7a7a7a";
+    } else {
+        secondaryLabelDiv.style.display = "none";
+    }
+}
+
+/* ---------------- description ---------------- */
+function openDescription(itemId, category, type, cameFrom) {
+    previousView = cameFrom || 'home';
+    const titleEl = document.getElementById('ideology-title');
+    const descEl = document.getElementById('ideology-description');
+    const iconEl = document.getElementById('ideology-icon');
+
+    iconEl.style.display = 'none';
+
+    if (type === 'ideology') {
+        titleEl.textContent = itemId.toUpperCase();
+        descEl.textContent = descriptions[itemId] || "Description coming soon!";
+    } else {
+        const prettyName = (resultsMapping[category] && resultsMapping[category][itemId])
+            ? resultsMapping[category][itemId]
+            : itemId.replace(/_/g, ' ');
+        titleEl.textContent = prettyName.toUpperCase();
+        descEl.textContent = descriptions[itemId] || "Description coming soon!";
+    }
+    showView('description');
+}
+
+function goBackFromDescription() {
+    showView(previousView);
+}
+
+/* ---------------- ideologies page ---------------- */
+function renderIdeologies() {
+    const container = document.getElementById('ideologies-container');
+    container.innerHTML = '';
+    for (const groupName in ideologyGroups) {
+        const section = document.createElement('div');
+        section.className = 'category-section';
+
+        const title = document.createElement('h2');
+        title.className = 'category-title';
+        title.textContent = groupName;
+        section.appendChild(title);
+
+        const flexContainer = document.createElement('div');
+        flexContainer.className = 'values-flex-container';
+
+        ideologyGroups[groupName].forEach(name => {
+            const bubble = document.createElement('a');
+            bubble.className = 'label-bubble';
+            bubble.href = 'javascript:void(0)';
+            bubble.textContent = name;
+            bubble.onclick = () => openDescription(name, null, 'ideology', 'ideologies');
+
+            bubble.style.backgroundColor = labelColors[name] || "#7a7a7a";
+            bubble.style.textDecoration = 'none';
+            bubble.style.fontSize = "1.1rem";
+            bubble.style.margin = "8px";
+            bubble.style.padding = "10px 25px";
+
+            flexContainer.appendChild(bubble);
+        });
+
+        section.appendChild(flexContainer);
+        container.appendChild(section);
+    }
+}
+
+/* ---------------- values page ---------------- */
+function renderValues() {
+    const container = document.getElementById('values-container');
+    container.innerHTML = '';
+    for (const category in resultsMapping) {
+        const section = document.createElement('div');
+        section.className = 'category-section';
+
+        const title = document.createElement('h2');
+        title.className = 'category-title';
+        title.textContent = categoryTitles[category] || category;
+        section.appendChild(title);
+
+        const flexContainer = document.createElement('div');
+        flexContainer.className = 'values-flex-container';
+
+        for (const id in resultsMapping[category]) {
+            const wrapper = document.createElement('a');
+            wrapper.className = 'result-item';
+            wrapper.href = 'javascript:void(0)';
+            wrapper.style.textDecoration = 'none';
+            wrapper.style.color = 'inherit';
+            wrapper.onclick = () => openDescription(id, category, null, 'values');
+
+            const name = document.createElement('p');
+            name.textContent = resultsMapping[category][id];
+            name.className = 'result-text';
+
+            wrapper.appendChild(name);
+            flexContainer.appendChild(wrapper);
+        }
+
+        section.appendChild(flexContainer);
+        container.appendChild(section);
+    }
+}
+
+/* wrap showView so ideologies/values render fresh each time */
+const _showView = showView;
+showView = function(name) {
+    _showView(name);
+    if (name === 'ideologies') renderIdeologies();
+    if (name === 'values') renderValues();
+};
+</script>
+</body>
+</html>
